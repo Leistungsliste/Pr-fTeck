@@ -3,23 +3,23 @@
   <channel>
     <title>Prüftechniker Weekly Update</title>
     <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
-    <description>Automatisch erzeugtes Weekly zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
+    <description>Automatisch erzeugtes Weekly mit KI-Zusammenfassung zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
     <language>de-de</language>
     <lastBuildDate>Fri, 20 Mar 2026 08:00:00 GMT</lastBuildDate>
     <ttl>10080</ttl>
 
     <item>
-      <title>Prüftechniker Weekly – Initiale Automatik-Version</title>
+      <title>Prüftechniker Weekly – KI-Version vorbereitet</title>
       <link>https://leistungsliste.github.io/Pr-tleck/</link>
-      <guid>prueftechniker-weekly-initial</guid>
+      <guid>prueftechniker-weekly-ki-initial</guid>
       <pubDate>Fri, 20 Mar 2026 08:00:00 GMT</pubDate>
       <description><![CDATA[
-<h3>Automatik ist eingerichtet</h3>
-<p>Ab jetzt kann diese XML-Datei wöchentlich per GitHub Action aktualisiert werden.</p>
+<h3>KI-Weekly vorbereitet</h3>
+<p>Wenn die GitHub Action läuft und ein gültiger <code>OPENAI_API_KEY</code> als Repository Secret hinterlegt ist, wird diese Datei automatisch mit einer KI-Zusammenfassung aktualisiert.</p>
 <ul>
-  <li>Quellen: DGUV, BAuA, VDE, Hersteller-News</li>
   <li>Bereitstellung: GitHub Pages</li>
-  <li>Aktualisierung: GitHub Actions</li>
+  <li>Automatisierung: GitHub Actions</li>
+  <li>Zusammenfassung: OpenAI Responses API</li>
 </ul>
       ]]></description>
     </item>
