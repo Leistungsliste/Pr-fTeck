@@ -14,40 +14,32 @@ REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
 
-USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/2.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/3.0)"
 
 SOURCES = [
-    {
-        "name": "DGUV Publikationen",
-        "feed_url": "https://publikationen.dguv.de/rss.xml",
-        "category": "normen",
-        "fallback_url": "https://publikationen.dguv.de/",
-        "max_items": 4,
-        "priority": 1,
-    },
     {
         "name": "BAuA Presse",
         "feed_url": "https://www.baua.de/DE/Service/Presse/rss.xml",
         "category": "normen",
-        "fallback_url": "https://www.baua.de/DE/Service/Presse/Presse.html",
-        "max_items": 3,
+        "fallback_url": "https://www.baua.de/",
+        "max_items": 5,
+        "priority": 1,
+    },
+    {
+        "name": "Heise News",
+        "feed_url": "https://www.heise.de/rss/heise.rdf",
+        "category": "praxis",
+        "fallback_url": "https://www.heise.de/",
+        "max_items": 5,
         "priority": 2,
     },
     {
-        "name": "VDE News",
-        "feed_url": "https://www.vde.com/de/rss-news",
-        "category": "normen",
-        "fallback_url": "https://www.vde.com/de",
-        "max_items": 3,
+        "name": "Golem News",
+        "feed_url": "https://rss.golem.de/rss.php?feed=RSS2.0",
+        "category": "praxis",
+        "fallback_url": "https://www.golem.de/",
+        "max_items": 5,
         "priority": 3,
-    },
-    {
-        "name": "Fluke Blog",
-        "feed_url": "https://www.fluke.com/en/learn/blog/rss",
-        "category": "geraete",
-        "fallback_url": "https://www.fluke.com/en/learn/blog",
-        "max_items": 2,
-        "priority": 4,
     },
 ]
 
@@ -56,30 +48,36 @@ KEYWORDS_HIGH = [
     "trbs",
     "betrsichv",
     "vde",
-    "din en 50678",
-    "din en 50699",
+    "din",
+    "en 50678",
+    "en 50699",
     "prüfung",
     "prüffrist",
+    "elektrisch",
     "sicherheit",
-    "elektrische anlagen",
+    "arbeitsschutz",
     "betriebsmittel",
+    "anlage",
+    "prüftechnik",
+    "messgerät",
 ]
 
 KEYWORDS_MEDIUM = [
     "software",
-    "secutest",
-    "izytroniq",
     "firmware",
-    "messgerät",
-    "gerätetester",
     "kalibrierung",
+    "gerätetester",
+    "messen",
     "update",
+    "norm",
+    "schutz",
+    "dokumentation",
 ]
 
 PRACTICE_HINTS = [
     "Prüffristen und Prüfumfang sollten immer nachvollziehbar aus Gefährdungsbeurteilung, Einsatzbedingungen und Erfahrung abgeleitet werden.",
     "Bei Normen- oder Softwareänderungen ist entscheidend, ob sich daraus konkrete Änderungen für Prüfabläufe, Dokumentation oder Grenzwerte ergeben.",
-    "Herstellerbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.",
+    "Hersteller- und Technikbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.",
 ]
 
 TITLE_HINTS = [
@@ -90,9 +88,8 @@ TITLE_HINTS = [
     ("TRBS", "Kann Auswirkungen auf Prüforganisation, befähigte Personen oder Prüftiefe haben."),
     ("DGUV", "Oft direkt relevant für Prüfpraxis und betriebliche Anforderungen."),
     ("VDE", "Kann normativ oder fachlich für Prüfabläufe relevant sein."),
-    ("Fluke", "Eher geräte- oder herstellerbezogen; Praxisnutzen prüfen."),
-    ("Gossen", "Eher geräte- oder softwarebezogen; Praxisnutzen prüfen."),
-    ("IZYTRONIQ", "Meist relevant für Dokumentation, Verwaltung und Prüfsoftware."),
+    ("Sicherheit", "Auf praktische Auswirkungen für sichere Prüfabläufe und Dokumentation prüfen."),
+    ("Mess", "Praxisnutzen für eingesetzte Messgeräte und Prüfroutinen prüfen."),
 ]
 
 
@@ -152,7 +149,11 @@ def score_item(title: str, summary: str, category: str, source_priority: int) ->
             score += 1
 
     if category == "normen":
+        score += 3
+    elif category == "geraete":
         score += 2
+    elif category == "praxis":
+        score += 1
 
     score += max(0, 5 - source_priority)
 
@@ -177,7 +178,24 @@ def derive_practical_note(title: str, summary: str, category: str) -> str:
         return "Auf mögliche Auswirkungen auf Prüfabläufe, Prüffristen und Dokumentation prüfen."
     if category == "geraete":
         return "Prüfen, ob das Thema für eingesetzte Messgeräte, Software oder Arbeitsabläufe praktisch relevant ist."
-    return "Praxisrelevanz im Zusammenhang mit deinem konkreten Prüfbereich prüfen."
+    if category == "praxis":
+        return "Praxisrelevanz im Zusammenhang mit deinem konkreten Prüfbereich prüfen."
+    return "Thema fachlich einordnen und auf Prüfbezug prüfen."
+
+
+def is_relevant_item(title: str, summary: str, excerpt: str) -> bool:
+    text = f"{title} {summary} {excerpt}".lower()
+    score = 0
+
+    for kw in KEYWORDS_HIGH:
+        if kw in text:
+            score += 2
+
+    for kw in KEYWORDS_MEDIUM:
+        if kw in text:
+            score += 1
+
+    return score >= 2
 
 
 def parse_feed(source: dict) -> list[dict]:
@@ -194,6 +212,10 @@ def parse_feed(source: dict) -> list[dict]:
             continue
 
         page_excerpt = fetch_page_excerpt(link)
+
+        if not is_relevant_item(title, summary, page_excerpt):
+            continue
+
         score, level = score_item(title, summary, source["category"], source["priority"])
         practical_note = derive_practical_note(title, summary, source["category"])
 
@@ -221,7 +243,7 @@ def collect_items() -> list[dict]:
     for source in SOURCES:
         try:
             source_items = parse_feed(source)
-            print(f"[INFO] {source['name']}: {len(source_items)} Einträge gesammelt")
+            print(f"[INFO] {source['name']}: {len(source_items)} relevante Einträge gesammelt")
             collected.extend(source_items)
         except Exception as exc:
             print(f"[WARN] Feed-Laden fehlgeschlagen: {source['name']} -> {exc}")
@@ -300,27 +322,21 @@ def build_weekly_html(items: list[dict], generated: datetime) -> str:
         )
     )
 
-    # Praxisbereich: erst echte Praxis-Einträge, dann allgemeine Hinweise
     blocks.append("<h4>Praxisrelevanz</h4>")
+    blocks.append("<ul>")
     if praxis:
-        blocks.append("<ul>")
         for item in praxis[:4]:
             blocks.append(entry_line(item))
-        for hint in PRACTICE_HINTS:
-            blocks.append(f"<li>{safe_text(hint)}</li>")
-        blocks.append("</ul>")
-    else:
-        blocks.append("<ul>")
-        for hint in PRACTICE_HINTS:
-            blocks.append(f"<li>{safe_text(hint)}</li>")
-        if items:
-            top = items[0]
-            blocks.append(
-                f"<li>Höchste automatische Relevanz diese Woche: "
-                f"<b>{safe_text(top['title'])}</b> "
-                f"({safe_text(top['source'])}, Einstufung: {safe_text(top['level'])}).</li>"
-            )
-        blocks.append("</ul>")
+    for hint in PRACTICE_HINTS:
+        blocks.append(f"<li>{safe_text(hint)}</li>")
+    if items:
+        top = items[0]
+        blocks.append(
+            f"<li>Höchste automatische Relevanz diese Woche: "
+            f"<b>{safe_text(top['title'])}</b> "
+            f"({safe_text(top['source'])}, Einstufung: {safe_text(top['level'])}).</li>"
+        )
+    blocks.append("</ul>")
 
     blocks.append("<h4>Quellen</h4>")
     if items:
@@ -388,7 +404,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("[INFO] Weekly V2 erzeugt")
+    print("[INFO] Weekly V3 erzeugt")
     print("[INFO] weekly-data.json aktualisiert")
     print("[INFO] prueftechniker-weekly.xml aktualisiert")
 
