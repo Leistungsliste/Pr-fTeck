@@ -5,29 +5,35 @@
     <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
     <description>Kostenlos automatisch erzeugtes Weekly zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
     <language>de-de</language>
-    <lastBuildDate>Fri, 20 Mar 2026 12:05:35 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 12:14:39 +0000</lastBuildDate>
     <ttl>10080</ttl>
 
     <item>
       <title>Prüftechniker Weekly – 20.03.2026</title>
       <link>https://leistungsliste.github.io/Pr-tleck/</link>
-      <guid>prueftechniker-weekly-2026-03-20-120535</guid>
-      <pubDate>Fri, 20 Mar 2026 12:05:35 +0000</pubDate>
+      <guid>prueftechniker-weekly-2026-03-20-121439</guid>
+      <pubDate>Fri, 20 Mar 2026 12:14:39 +0000</pubDate>
       <description><![CDATA[
 <h3>Prüftechniker Weekly</h3>
-<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. Die Einträge sind nach vermuteter Relevanz für Prüftechniker vorsortiert. Stand: 20.03.2026 12:05 UTC.</p>
+<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. Die Einträge sind nach vermuteter Relevanz für Prüftechniker vorsortiert. Stand: 20.03.2026 12:14 UTC.</p>
 <h4>Offizielle Quellen / Normen / Regeln</h4>
 <p>Diese Woche keine normenbezogenen Einträge gefunden.</p>
 <h4>Messgeräte / Hersteller</h4>
 <p>Diese Woche keine gerätebezogenen Einträge gefunden.</p>
 <h4>Praxisrelevanz</h4>
 <ul>
+<li><b>OpenWrt: Service-Releases schließen kritische Sicherheitslücken</b> (<i>Mittel</i>, Heise News)<br>Die Service-Releases 25.12.1 und 24.10.6 des Router-Betriebssystems OpenWrt dichten als kritisch eingestufte Sicherheitslücken ab.<br><small>Praxis: Auf praktische Auswirkungen für sichere Prüfabläufe und Dokumentation prüfen.</small></li>
+<li><b>Lücke bei Campusnet: Datenpanne betrifft mehr als eine Million Studenten</b> (<i>Mittel</i>, Golem News)<br>Der CCC hat eine Sicherheitslücke aufgedeckt: Angreifer hätten persönliche Daten der Studenten von über 20 deutschen Hochschulen abgreifen können. ( Datenleck , Datenschutz )<br><small>Praxis: Auf praktische Auswirkungen für sichere Prüfabläufe und Dokumentation prüfen.</small></li>
 <li>Prüffristen und Prüfumfang sollten immer nachvollziehbar aus Gefährdungsbeurteilung, Einsatzbedingungen und Erfahrung abgeleitet werden.</li>
 <li>Bei Normen- oder Softwareänderungen ist entscheidend, ob sich daraus konkrete Änderungen für Prüfabläufe, Dokumentation oder Grenzwerte ergeben.</li>
-<li>Herstellerbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.</li>
+<li>Hersteller- und Technikbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.</li>
+<li>Höchste automatische Relevanz diese Woche: <b>OpenWrt: Service-Releases schließen kritische Sicherheitslücken</b> (Heise News, Einstufung: Mittel).</li>
 </ul>
 <h4>Quellen</h4>
-<p>Keine Quellen verfügbar.</p>
+<ul>
+<li><a href="https://www.heise.de/news/OpenWrt-Service-Releases-schliessen-kritische-Sicherheitsluecken-11219084.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag">OpenWrt: Service-Releases schließen kritische Sicherheitslücken</a> – Heise News (praxis)</li>
+<li><a href="https://www.golem.de/news/luecke-bei-campusnet-datenpanne-betrifft-mehr-als-eine-million-studenten-2603-206738.html">Lücke bei Campusnet: Datenpanne betrifft mehr als eine Million Studenten</a> – Golem News (praxis)</li>
+</ul>
       ]]></description>
     </item>
   </channel>
