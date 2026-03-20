@@ -1,238 +1,568 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Prüfdienstleister Weekly</title>
-
 <style>
 :root{
-  --green:#8db255;
-  --dark:#0f1720;
-  --gray:#f4f6f8;
-  --border:#e3e6ea;
-  --text:#1b1f23;
+  --green:#9fbb59;
+  --dark:#111111;
+  --text:#111111;
+  --muted:#5f6670;
+  --bg:#f3f3f3;
+  --card:#ffffff;
+  --line:#dcdcdc;
+  --chip:#eef1f4;
 }
 
+*{box-sizing:border-box}
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   color:var(--text);
-  background:#fff;
+  background:var(--bg);
 }
 
-/* HEADER */
 .header{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:18px 34px;
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:20px 40px;
-  border-bottom:1px solid var(--border);
+  justify-content:space-between;
+  gap:20px;
 }
 
 .logo{
-  font-size:22px;
-  font-weight:bold;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.02em;
 }
 
 .nav{
   display:flex;
-  gap:20px;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
 }
 
 .nav a{
   text-decoration:none;
-  color:#333;
-  font-weight:500;
+  color:#111;
+  font-size:14px;
+  font-weight:600;
 }
 
-.btn{
-  background:var(--green);
+.nav .btn{
+  background:#000;
   color:#fff;
-  padding:10px 18px;
+  padding:11px 18px;
   border:none;
   cursor:pointer;
+  font-weight:700;
 }
 
-/* HERO */
 .hero{
-  padding:60px 40px;
-  background:var(--gray);
-  font-size:28px;
-  font-weight:bold;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:42px 34px;
 }
 
-/* LAYOUT */
+.hero h1{
+  margin:0;
+  font-size:48px;
+  line-height:1.05;
+  max-width:980px;
+}
+
+.hero p{
+  margin:16px 0 0;
+  color:var(--muted);
+  max-width:900px;
+  line-height:1.5;
+}
+
 .container{
   display:grid;
   grid-template-columns:320px 1fr;
-  gap:20px;
-  padding:30px 40px;
+  gap:22px;
+  padding:28px 34px 40px;
 }
 
-/* SIDEBAR */
 .sidebar{
-  border:1px solid var(--border);
+  background:#fff;
+  border:1px solid var(--line);
   padding:20px;
 }
 
 .sidebar h3{
-  margin-top:0;
+  margin:0 0 14px;
+  font-size:24px;
+}
+
+.sidebar p{
+  color:var(--muted);
+  line-height:1.45;
 }
 
 input{
   width:100%;
-  padding:10px;
-  margin:10px 0;
-  border:1px solid var(--border);
+  padding:12px;
+  border:1px solid var(--line);
+  background:#fff;
+  font-size:14px;
 }
 
-/* FEED */
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.btn-green{
+  background:var(--green);
+  color:#111;
+  border:none;
+  padding:12px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.btn-light{
+  background:#fff;
+  border:1px solid var(--line);
+  padding:12px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.status{
+  margin-top:16px;
+  padding:14px;
+  border:1px solid var(--line);
+  background:#fafafa;
+  line-height:1.55;
+}
+
+.main{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.main-top{
+  background:#fff;
+  border:1px solid var(--line);
+  padding:18px;
+}
+
+.main-top h2{
+  margin:0 0 10px;
+  font-size:28px;
+}
+
+.main-top p{
+  margin:0 0 14px;
+  color:var(--muted);
+}
+
+.search{
+  margin-bottom:14px;
+}
+
+.filters{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:700;
+}
+
+.filter-btn.active{
+  background:var(--green);
+  border-color:var(--green);
+}
+
 .feed{
   display:flex;
   flex-direction:column;
-  gap:20px;
+  gap:16px;
 }
 
 .card{
-  border:1px solid var(--border);
+  background:var(--card);
+  border:1px solid var(--line);
   padding:20px;
 }
 
 .card.weekly{
-  border-left:6px solid var(--green);
-  background:#f9fbf6;
+  border-left:8px solid var(--green);
+}
+
+.card h3{
+  margin:0 0 10px;
+  font-size:22px;
 }
 
 .chips{
-  margin:10px 0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:12px;
 }
 
 .chip{
   display:inline-block;
-  background:#eef2f5;
-  padding:5px 10px;
-  margin-right:5px;
+  padding:6px 10px;
+  background:var(--chip);
   font-size:12px;
+  font-weight:700;
 }
 
-.search{
-  width:100%;
-  padding:12px;
-  margin-bottom:20px;
+.desc{
+  line-height:1.6;
+  color:#222;
+  white-space:pre-wrap;
 }
 
-/* MOBILE */
-@media(max-width:900px){
+.weekly-html{
+  margin-top:12px;
+  padding:14px;
+  border:1px solid var(--line);
+  background:#fafafa;
+}
+
+.weekly-html h3,
+.weekly-html h4{
+  margin:0 0 10px;
+}
+
+.weekly-html p,
+.weekly-html li{
+  line-height:1.6;
+}
+
+.weekly-html ul{
+  margin:8px 0 14px 20px;
+  padding:0;
+}
+
+.linkrow{
+  margin-top:14px;
+}
+
+.linkrow a{
+  color:#000;
+  font-weight:700;
+}
+
+.empty{
+  background:#fff;
+  border:1px solid var(--line);
+  padding:24px;
+}
+
+@media (max-width: 980px){
   .container{
     grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:34px;
+  }
+
+  .header{
+    align-items:flex-start;
+    flex-direction:column;
   }
 }
 </style>
 </head>
-
 <body>
 
 <div class="header">
   <div class="logo">DPS Weekly</div>
   <div class="nav">
-    <a href="#">Unternehmen</a>
-    <a href="#">Leistungen</a>
-    <a href="#">Wissen</a>
-    <button class="btn">Anfragen</button>
+    <a href="#">UNTERNEHMEN</a>
+    <a href="#">LEISTUNGEN</a>
+    <a href="#">WISSENSWERTES</a>
+    <a href="#">JOBS & KARRIERE</a>
+    <button class="btn">ANFRAGEN</button>
   </div>
 </div>
 
 <div class="hero">
-  WIR VERANTWORTEN DIE SICHERHEIT.<br>
-  DEIN WÖCHENTLICHES PRÜFDIENSTLEISTER UPDATE.
+  <h1>WIR VERANTWORTEN DIE SICHERHEIT. HEUTE UND MORGEN.</h1>
+  <p>Das Weekly bündelt aktuelle Informationen für Prüfdienstleister aus Arbeitssicherheit, DGUV, VDE-/Normenumfeld und Gerätethemen in einer übersichtlichen Oberfläche.</p>
 </div>
 
 <div class="container">
+  <aside class="sidebar">
+    <h3>Weekly-Feed</h3>
+    <p>Direkte XML-Datei eintragen und Feed laden.</p>
 
-  <div class="sidebar">
-    <h3>Weekly Feed</h3>
+    <input id="feedUrl" value="./prueftechniker-weekly.xml" />
 
-    <input id="feedUrl" value="./prueftechniker-weekly.xml">
+    <div class="actions">
+      <button class="btn-green" onclick="saveFeed()">Feed speichern</button>
+      <button class="btn-light" onclick="loadFeed()">Jetzt laden</button>
+    </div>
 
-    <button onclick="loadFeed()" class="btn">Feed laden</button>
+    <div class="status" id="statusBox">
+      Modus: –<br>
+      Status: –<br>
+      Letztes Update: –<br>
+      Einträge: –
+    </div>
+  </aside>
 
-    <p id="status"></p>
-  </div>
+  <main class="main">
+    <div class="main-top">
+      <h2>Feed-Übersicht</h2>
+      <p>Filtere gezielt nach relevanten Themen für Prüfdienstleister.</p>
 
-  <div>
+      <input class="search" id="search" placeholder="Suche nach Titel, Quelle oder Inhalt ..." oninput="render()" />
 
-    <input id="search" class="search" placeholder="Suche..." oninput="render()">
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">Alle</button>
+        <button class="filter-btn" data-filter="normen">Normen</button>
+        <button class="filter-btn" data-filter="dguv">DGUV</button>
+        <button class="filter-btn" data-filter="vde">VDE</button>
+        <button class="filter-btn" data-filter="geraete">Geräte</button>
+      </div>
+    </div>
 
     <div id="feed" class="feed"></div>
-
-  </div>
-
+  </main>
 </div>
 
 <script>
-let entries=[]
+const STORAGE_KEY = "pruefdienstleister_feed_url_v4";
+let currentFilter = "all";
+let entries = [];
+let meta = null;
 
 function strip(html){
-  let div=document.createElement("div")
-  div.innerHTML=html
-  return div.textContent || div.innerText
+  const div = document.createElement("div");
+  div.innerHTML = html || "";
+  return div.textContent || div.innerText || "";
+}
+
+function normalizeDate(dateString){
+  if(!dateString) return "";
+  const d = new Date(dateString);
+  if(isNaN(d.getTime())) return dateString;
+  return d.toLocaleDateString("de-DE") + ", " + d.toLocaleTimeString("de-DE", {
+    hour:"2-digit",
+    minute:"2-digit"
+  });
+}
+
+function saveFeed(){
+  const url = document.getElementById("feedUrl").value.trim() || "./prueftechniker-weekly.xml";
+  localStorage.setItem(STORAGE_KEY, url);
+  loadFeed();
+}
+
+function getSavedFeed(){
+  return localStorage.getItem(STORAGE_KEY) || "./prueftechniker-weekly.xml";
+}
+
+function levelChip(level){
+  const safe = (level || "Info");
+  return `<span class="chip">${safe}</span>`;
+}
+
+function classifyCategory(entry){
+  const raw = `${entry.category || ""} ${entry.source || ""} ${entry.title || ""} ${entry.description || ""} ${entry.rawHtml || ""}`.toLowerCase();
+
+  if(raw.includes("dguv")) return "dguv";
+  if(raw.includes("vde") || raw.includes("cert@vde") || raw.includes("vde verlag") || raw.includes("vde fnn") || raw.includes("vde etg")) return "vde";
+  if(raw.includes("norm") || raw.includes("trbs") || raw.includes("betrsichv") || raw.includes("50678") || raw.includes("50699") || raw.includes("arbeitssicherheit")) return "normen";
+  if(raw.includes("gerät") || raw.includes("messgerät") || raw.includes("software") || raw.includes("firmware") || raw.includes("kalibrier")) return "geraete";
+
+  return entry.category || "all";
+}
+
+function updateStatus(){
+  const items = Array.isArray(meta?.items) ? meta.items : [];
+  document.getElementById("statusBox").innerHTML = `
+    Modus: ${meta?.mode || "–"}<br>
+    Status: ${meta?.status || "–"}<br>
+    Letztes Update: ${meta?.generated_at ? normalizeDate(meta.generated_at) : "–"}<br>
+    Einträge: ${items.length}
+  `;
+}
+
+async function loadMeta(feedUrl){
+  try{
+    const metaUrl = feedUrl.endsWith("prueftechniker-weekly.xml")
+      ? feedUrl.replace("prueftechniker-weekly.xml", "weekly-data.json")
+      : "./weekly-data.json";
+
+    const res = await fetch(metaUrl, { cache:"no-store" });
+    if(!res.ok) throw new Error();
+    meta = await res.json();
+  }catch{
+    meta = null;
+  }
+  updateStatus();
+}
+
+function parseXml(text){
+  const xml = new DOMParser().parseFromString(text, "text/xml");
+  const items = [...xml.querySelectorAll("item")];
+
+  return items.map((item, i) => ({
+    id: "rss-" + i,
+    title: item.querySelector("title")?.textContent || "Ohne Titel",
+    source: "Weekly RSS",
+    category: "weekly",
+    date: item.querySelector("pubDate")?.textContent || "",
+    description: strip(item.querySelector("description")?.textContent || "").slice(0, 500),
+    rawHtml: item.querySelector("description")?.textContent || "",
+    link: item.querySelector("link")?.textContent || "",
+    level: "Info"
+  }));
 }
 
 async function loadFeed(){
-  const url=document.getElementById("feedUrl").value
+  const url = (document.getElementById("feedUrl").value.trim() || getSavedFeed());
+  document.getElementById("feedUrl").value = url;
 
   try{
-    const res=await fetch(url)
-    const text=await res.text()
+    const res = await fetch(url, { cache:"no-store" });
+    if(!res.ok) throw new Error("Feed nicht erreichbar");
 
-    const xml=new DOMParser().parseFromString(text,"text/xml")
-    const items=[...xml.querySelectorAll("item")]
+    const text = await res.text();
+    const rssEntries = parseXml(text);
 
-    entries=items.map(item=>({
-      title:item.querySelector("title")?.textContent,
-      desc:item.querySelector("description")?.textContent,
-      date:item.querySelector("pubDate")?.textContent,
-      link:item.querySelector("link")?.textContent
-    }))
+    await loadMeta(url);
 
-    document.getElementById("status").innerText="Feed geladen ✔"
-    render()
+    let metaEntries = [];
+    if(Array.isArray(meta?.items)){
+      metaEntries = meta.items.map((item, i) => ({
+        id: "meta-" + i,
+        title: item.title || "Ohne Titel",
+        source: item.source || "Quelle",
+        category: classifyCategory(item),
+        date: item.published || "",
+        description: item.summary || item.page_excerpt || "",
+        rawHtml: "",
+        link: item.link || "",
+        level: item.level || "Info",
+        practical_note: item.practical_note || ""
+      }));
+    }
+
+    entries = [...rssEntries, ...metaEntries];
+    render();
 
   }catch{
-    document.getElementById("status").innerText="Fehler beim Laden"
+    meta = { mode:"fehler", status:"Feed konnte nicht geladen werden", generated_at:"", items:[] };
+    updateStatus();
+    entries = [{
+      id: "error",
+      title: "Weekly-Feed konnte nicht geladen werden",
+      source: "Systemhinweis",
+      category: "weekly",
+      date: new Date().toISOString(),
+      description: "Prüfe die Feed-URL oder hoste die XML-Datei öffentlich, z. B. über GitHub Pages.",
+      rawHtml: "",
+      link: "",
+      level: "Info"
+    }];
+    render();
   }
+}
+
+function matchesSearch(entry, term){
+  if(!term) return true;
+  const hay = [
+    entry.title,
+    entry.source,
+    entry.category,
+    entry.description,
+    entry.rawHtml,
+    entry.practical_note || ""
+  ].join(" ").toLowerCase();
+
+  return hay.includes(term.toLowerCase());
+}
+
+function renderCard(e){
+  const cat = classifyCategory(e);
+  const chips = `
+    <div class="chips">
+      <span class="chip">${e.source || "Quelle"}</span>
+      <span class="chip">${cat}</span>
+      <span class="chip">${e.date ? normalizeDate(e.date) : "ohne Datum"}</span>
+      ${levelChip(e.level)}
+    </div>
+  `;
+
+  const actions = e.link
+    ? `<div class="linkrow"><a href="${e.link}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a></div>`
+    : "";
+
+  if(e.source === "Weekly RSS" && e.rawHtml){
+    return `
+      <div class="card weekly">
+        <h3>${e.title}</h3>
+        ${chips}
+        <div class="weekly-html">${e.rawHtml}</div>
+        ${actions}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="card">
+      <h3>${e.title}</h3>
+      ${chips}
+      <p class="desc">${e.description || ""}</p>
+      ${e.practical_note ? `<p class="practice"><strong>Praxis:</strong> ${e.practical_note}</p>` : ""}
+      ${actions}
+    </div>
+  `;
 }
 
 function render(){
-  const search=document.getElementById("search").value.toLowerCase()
+  const term = document.getElementById("search").value.trim();
+  let filtered = entries.filter(e => matchesSearch(e, term));
 
-  const container=document.getElementById("feed")
-
-  const filtered=entries.filter(e=>
-    e.title.toLowerCase().includes(search) ||
-    strip(e.desc).toLowerCase().includes(search)
-  )
-
-  if(!filtered.length){
-    container.innerHTML="<p>Keine Einträge</p>"
-    return
+  if(currentFilter !== "all"){
+    filtered = filtered.filter(e => classifyCategory(e) === currentFilter);
   }
 
-  container.innerHTML=filtered.map(e=>`
-    <div class="card weekly">
-      <h3>${e.title}</h3>
-      <div class="chips">
-        <span class="chip">Weekly</span>
-        <span class="chip">${new Date(e.date).toLocaleDateString()}</span>
-      </div>
-      <p>${strip(e.desc).slice(0,400)}</p>
-      <a href="${e.link}" target="_blank">Quelle öffnen</a>
-    </div>
-  `).join("")
+  const container = document.getElementById("feed");
+  if(!filtered.length){
+    container.innerHTML = `<div class="empty">Keine Einträge gefunden.</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(renderCard).join("");
 }
 
-loadFeed()
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+document.getElementById("feedUrl").value = getSavedFeed();
+loadFeed();
 </script>
 
 </body>
