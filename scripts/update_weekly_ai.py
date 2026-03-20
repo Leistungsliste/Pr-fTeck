@@ -14,82 +14,146 @@ REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
 
-USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/3.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; PruefdienstleisterWeeklyBot/4.0)"
 
+# Öffentliche Feeds / RSS-nahe Quellen
 SOURCES = [
     {
         "name": "BAuA Presse",
-        "feed_url": "https://www.baua.de/DE/Service/Presse/rss.xml",
-        "category": "normen",
+        "feed_url": "https://www.baua.de/de/Presse/Aktuelle-Pressemitteilungen/RSS/BAuA-Presse-RSS-Feed.xml",
+        "category": "arbeitssicherheit",
         "fallback_url": "https://www.baua.de/",
-        "max_items": 5,
+        "max_items": 6,
         "priority": 1,
     },
     {
-        "name": "Heise News",
-        "feed_url": "https://www.heise.de/rss/heise.rdf",
-        "category": "praxis",
-        "fallback_url": "https://www.heise.de/",
+        "name": "BG ETEM Aktuelle Meldungen",
+        "feed_url": "https://www.bgetem.de/startseite-der-bg-etem/aktuelle-meldungen/RSS",
+        "category": "arbeitssicherheit",
+        "fallback_url": "https://www.bgetem.de/",
         "max_items": 5,
         "priority": 2,
     },
     {
-        "name": "Golem News",
-        "feed_url": "https://rss.golem.de/rss.php?feed=RSS2.0",
-        "category": "praxis",
-        "fallback_url": "https://www.golem.de/",
+        "name": "BG ETEM Pressemeldungen",
+        "feed_url": "https://www.bgetem.de/presse-aktuelles/pressemeldungen/aktuelle-pressemeldungen/RSS",
+        "category": "arbeitssicherheit",
+        "fallback_url": "https://www.bgetem.de/",
         "max_items": 5,
         "priority": 3,
     },
+    {
+        "name": "CERT@VDE News",
+        "feed_url": "https://cert.vde.com/en/service/rss-feeds/",
+        "category": "vde_normen",
+        "fallback_url": "https://cert.vde.com/en/service/rss-feeds/",
+        "max_items": 4,
+        "priority": 4,
+    },
 ]
 
-KEYWORDS_HIGH = [
+# Statische Referenzen ohne RSS, aber fachlich wichtig
+STATIC_REFERENCES = [
+    {
+        "title": "BAuA – Aktuelles",
+        "source": "BAuA",
+        "category": "arbeitssicherheit",
+        "link": "https://www.baua.de/DE/Angebote/Aktuelles",
+        "summary": "Amtliche Arbeitsschutz- und Regelwerksinformationen aus dem BAuA-Umfeld.",
+        "published": "",
+        "score": 8,
+        "level": "Hoch",
+        "practical_note": "Regelwerks- und Arbeitsschutzänderungen auf Auswirkungen für Prüforganisation, Dokumentation und Fristen prüfen.",
+    },
+    {
+        "title": "DGUV – RSS-Feeds abonnieren",
+        "source": "DGUV",
+        "category": "arbeitssicherheit",
+        "link": "https://www.dguv.de/de/sonstiges/rss-feed-so-gehts/index.jsp",
+        "summary": "Zentrale Einstiegsseite der DGUV für RSS-Feeds und aktuelle DGUV-Informationsangebote.",
+        "published": "",
+        "score": 8,
+        "level": "Hoch",
+        "practical_note": "Relevant für Prävention, DGUV-Umfeld und Veröffentlichungen mit betrieblicher Wirkung.",
+    },
+    {
+        "title": "VDE Verlag – Normen / Standards",
+        "source": "VDE Verlag",
+        "category": "vde_normen",
+        "link": "https://www.vde-verlag.de/",
+        "summary": "Zentrale Referenz für VDE-Normen und Standards; offene RSS-Abdeckung für Normen selbst ist begrenzt.",
+        "published": "",
+        "score": 9,
+        "level": "Hoch",
+        "practical_note": "Für Prüfdienstleister wichtig zur gezielten Beobachtung relevanter Normen wie EN 50678 / EN 50699 und verwandter Standards.",
+    },
+    {
+        "title": "CERT@VDE – RSS Feeds",
+        "source": "CERT@VDE",
+        "category": "vde_normen",
+        "link": "https://cert.vde.com/en/service/rss-feeds/",
+        "summary": "VDE-nahe News- und Advisory-Feeds für technische Sicherheits- und Produktthemen.",
+        "published": "",
+        "score": 7,
+        "level": "Mittel",
+        "practical_note": "Besonders interessant bei Produktsicherheit, Industrial Security und gerätenahen Sicherheitsthemen.",
+    },
+]
+
+HIGH_KEYWORDS = [
     "dguv",
     "trbs",
     "betrsichv",
+    "baua",
     "vde",
     "din",
     "en 50678",
     "en 50699",
     "prüfung",
     "prüffrist",
-    "elektrisch",
-    "sicherheit",
     "arbeitsschutz",
+    "sicherheit",
     "betriebsmittel",
-    "anlage",
-    "prüftechnik",
-    "messgerät",
+    "elektrische anlagen",
+    "elektrisch",
+    "regelwerk",
+    "befähigte person",
+    "gefahrstoff",
+    "prävention",
 ]
 
-KEYWORDS_MEDIUM = [
+MEDIUM_KEYWORDS = [
+    "messgerät",
+    "gerätetester",
     "software",
     "firmware",
     "kalibrierung",
-    "gerätetester",
-    "messen",
-    "update",
-    "norm",
-    "schutz",
     "dokumentation",
+    "schutz",
+    "rückruf",
+    "produkt",
+    "seminar",
+    "update",
+    "advisory",
+    "bulletin",
 ]
 
 PRACTICE_HINTS = [
-    "Prüffristen und Prüfumfang sollten immer nachvollziehbar aus Gefährdungsbeurteilung, Einsatzbedingungen und Erfahrung abgeleitet werden.",
-    "Bei Normen- oder Softwareänderungen ist entscheidend, ob sich daraus konkrete Änderungen für Prüfabläufe, Dokumentation oder Grenzwerte ergeben.",
-    "Hersteller- und Technikbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.",
+    "Für Prüfdienstleister sind Änderungen bei Arbeitsschutz, BetrSichV/TRBS, DGUV-Umfeld und Normen besonders relevant, wenn sie Prüforganisation, Prüftiefe, Fristen oder Dokumentation beeinflussen.",
+    "Beim Normenumfeld sollte immer geprüft werden, ob sich die Änderung direkt auf Arbeitsanweisungen, Messabläufe oder Protokolle auswirkt.",
+    "VDE-/Normenquellen sind fachlich besonders wichtig, auch wenn es dafür nicht immer einen einfachen offenen News-RSS wie bei klassischen Medien gibt.",
+    "Hersteller- und Technikbeiträge sind nützlich, sollten aber für einen Prüfdienstleister immer von amtlichen und regelwerksnahen Quellen getrennt bewertet werden.",
 ]
 
 TITLE_HINTS = [
-    ("0701", "Kann für Reparaturprüfung bzw. Normenumfeld tragbarer Geräte relevant sein."),
-    ("0702", "Kann für Wiederholungsprüfung bzw. Normenumfeld tragbarer Geräte relevant sein."),
-    ("50678", "Betrifft typischerweise das aktuelle Normenumfeld für Prüfungen nach Reparatur."),
-    ("50699", "Betrifft typischerweise das aktuelle Normenumfeld für Wiederholungsprüfungen."),
-    ("TRBS", "Kann Auswirkungen auf Prüforganisation, befähigte Personen oder Prüftiefe haben."),
-    ("DGUV", "Oft direkt relevant für Prüfpraxis und betriebliche Anforderungen."),
-    ("VDE", "Kann normativ oder fachlich für Prüfabläufe relevant sein."),
-    ("Sicherheit", "Auf praktische Auswirkungen für sichere Prüfabläufe und Dokumentation prüfen."),
-    ("Mess", "Praxisnutzen für eingesetzte Messgeräte und Prüfroutinen prüfen."),
+    ("TRBS", "Kann Auswirkungen auf Prüforganisation, befähigte Personen, Prüftiefe oder Dokumentationspflichten haben."),
+    ("DGUV", "Oft direkt relevant für Prävention, betriebliche Anforderungen und Prüfpraxis."),
+    ("BAuA", "Amtliche Einordnung aus dem Arbeitsschutz- und Regelwerksumfeld."),
+    ("VDE", "Kann normativ oder technisch für Prüfabläufe, Messverfahren oder Dokumentation relevant sein."),
+    ("50678", "Betrifft typischerweise Prüfungen nach Reparatur bzw. das zugehörige Normenumfeld."),
+    ("50699", "Betrifft typischerweise Wiederholungsprüfungen bzw. das zugehörige Normenumfeld."),
+    ("Rückruf", "Kann für Produktsicherheit und Kundenhinweise praktisch relevant sein."),
+    ("Advisory", "Auf konkrete Produkt- oder Sicherheitsrelevanz für den Prüfalltag prüfen."),
 ]
 
 
@@ -108,7 +172,7 @@ def strip_html(raw_html: str) -> str:
     return text.strip()
 
 
-def truncate(text: str, max_len: int = 500) -> str:
+def truncate(text: str, max_len: int = 700) -> str:
     text = (text or "").strip()
     return text[:max_len] + ("…" if len(text) > max_len else "")
 
@@ -140,26 +204,28 @@ def score_item(title: str, summary: str, category: str, source_priority: int) ->
     text = f"{title} {summary}".lower()
     score = 0
 
-    for kw in KEYWORDS_HIGH:
+    for kw in HIGH_KEYWORDS:
         if kw in text:
             score += 3
 
-    for kw in KEYWORDS_MEDIUM:
+    for kw in MEDIUM_KEYWORDS:
         if kw in text:
             score += 1
 
-    if category == "normen":
+    if category == "arbeitssicherheit":
         score += 3
-    elif category == "geraete":
+    elif category == "vde_normen":
+        score += 3
+    elif category == "messgeraete":
         score += 2
-    elif category == "praxis":
-        score += 1
 
     score += max(0, 5 - source_priority)
 
-    if score >= 10:
+    if score >= 11:
+        level = "Kritisch"
+    elif score >= 8:
         level = "Hoch"
-    elif score >= 6:
+    elif score >= 5:
         level = "Mittel"
     else:
         level = "Info"
@@ -174,24 +240,24 @@ def derive_practical_note(title: str, summary: str, category: str) -> str:
         if needle.lower() in hay.lower():
             return note
 
-    if category == "normen":
-        return "Auf mögliche Auswirkungen auf Prüfabläufe, Prüffristen und Dokumentation prüfen."
-    if category == "geraete":
-        return "Prüfen, ob das Thema für eingesetzte Messgeräte, Software oder Arbeitsabläufe praktisch relevant ist."
-    if category == "praxis":
-        return "Praxisrelevanz im Zusammenhang mit deinem konkreten Prüfbereich prüfen."
-    return "Thema fachlich einordnen und auf Prüfbezug prüfen."
+    if category == "arbeitssicherheit":
+        return "Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen."
+    if category == "vde_normen":
+        return "Auf Änderungen mit direktem Einfluss auf Prüfabläufe, Messverfahren oder Prüfanweisungen prüfen."
+    if category == "messgeraete":
+        return "Auf praktische Relevanz für eingesetzte Prüfgeräte, Software oder Kalibrierprozesse prüfen."
+    return "Thema fachlich auf Relevanz für Prüfdienstleistungen einordnen."
 
 
 def is_relevant_item(title: str, summary: str, excerpt: str) -> bool:
     text = f"{title} {summary} {excerpt}".lower()
     score = 0
 
-    for kw in KEYWORDS_HIGH:
+    for kw in HIGH_KEYWORDS:
         if kw in text:
             score += 2
 
-    for kw in KEYWORDS_MEDIUM:
+    for kw in MEDIUM_KEYWORDS:
         if kw in text:
             score += 1
 
@@ -262,8 +328,9 @@ def collect_items() -> list[dict]:
                 }
             )
 
+    collected.extend(STATIC_REFERENCES)
     collected.sort(key=lambda x: (x["score"], x["published"]), reverse=True)
-    return collected[:12]
+    return collected[:14]
 
 
 def entry_line(item: dict) -> str:
@@ -293,40 +360,45 @@ def build_section(title: str, items: list[dict], empty_text: str) -> str:
 
 
 def build_weekly_html(items: list[dict], generated: datetime) -> str:
-    normen = [x for x in items if x["category"] == "normen"]
-    geraete = [x for x in items if x["category"] == "geraete"]
-    praxis = [x for x in items if x["category"] == "praxis"]
+    arbeit = [x for x in items if x["category"] == "arbeitssicherheit"]
+    normen = [x for x in items if x["category"] == "vde_normen"]
+    geraete = [x for x in items if x["category"] == "messgeraete"]
 
     intro = (
-        "Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. "
-        "Die Einträge sind nach vermuteter Relevanz für Prüftechniker vorsortiert."
+        "Dieses Weekly wurde automatisch und kostenlos aus öffentlich erreichbaren Quellen erzeugt. "
+        "Es ist auf Arbeitssicherheit, Normenumfeld und Praxisrelevanz für Prüfdienstleister ausgerichtet."
     )
 
     blocks = []
-    blocks.append("<h3>Prüftechniker Weekly</h3>")
+    blocks.append("<h3>Prüfdienstleister Weekly</h3>")
     blocks.append(f"<p>{safe_text(intro)} Stand: {generated.strftime('%d.%m.%Y %H:%M UTC')}.</p>")
 
     blocks.append(
         build_section(
-            "Offizielle Quellen / Normen / Regeln",
-            normen[:6],
-            "Diese Woche keine normenbezogenen Einträge gefunden.",
+            "Arbeitssicherheit / Arbeitsschutz / Regelwerk",
+            arbeit[:6],
+            "Diese Woche keine relevanten Einträge aus Arbeitssicherheit oder Regelwerksumfeld gefunden.",
         )
     )
 
     blocks.append(
         build_section(
-            "Messgeräte / Hersteller",
-            geraete[:5],
-            "Diese Woche keine gerätebezogenen Einträge gefunden.",
+            "VDE / Normenumfeld / technische Sicherheit",
+            normen[:6],
+            "Diese Woche keine relevanten Einträge aus dem VDE-/Normenumfeld gefunden.",
         )
     )
 
-    blocks.append("<h4>Praxisrelevanz</h4>")
+    blocks.append(
+        build_section(
+            "Messgeräte / Prüfsoftware / Produktthemen",
+            geraete[:5],
+            "Diese Woche keine relevanten geräte- oder softwarebezogenen Einträge gefunden.",
+        )
+    )
+
+    blocks.append("<h4>Praxisrelevanz für Prüfdienstleister</h4>")
     blocks.append("<ul>")
-    if praxis:
-        for item in praxis[:4]:
-            blocks.append(entry_line(item))
     for hint in PRACTICE_HINTS:
         blocks.append(f"<li>{safe_text(hint)}</li>")
     if items:
@@ -355,15 +427,15 @@ def build_weekly_html(items: list[dict], generated: datetime) -> str:
 
 def build_xml(html_description: str, generated: datetime) -> str:
     pub_date = format_datetime(generated)
-    guid = f"prueftechniker-weekly-{generated.strftime('%Y-%m-%d-%H%M%S')}"
-    title = f"Prüftechniker Weekly – {generated.strftime('%d.%m.%Y')}"
+    guid = f"pruefdienstleister-weekly-{generated.strftime('%Y-%m-%d-%H%M%S')}"
+    title = f"Prüfdienstleister Weekly – {generated.strftime('%d.%m.%Y')}"
 
     return f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Prüftechniker Weekly Update</title>
+    <title>Prüfdienstleister Weekly Update</title>
     <link>{REPO_BASE_URL}/prueftechniker-weekly.xml</link>
-    <description>Kostenlos automatisch erzeugtes Weekly zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
+    <description>Kostenlos automatisch erzeugtes Weekly zu Arbeitssicherheit, VDE-/Normenumfeld und relevanten Themen für Prüfdienstleister.</description>
     <language>de-de</language>
     <lastBuildDate>{pub_date}</lastBuildDate>
     <ttl>10080</ttl>
@@ -395,6 +467,7 @@ def main():
                 "generated_at": generated.isoformat(),
                 "status": "ok-free-mode",
                 "mode": "free-no-api",
+                "scope": "arbeitssicherheit-vde-pruefdienstleister",
                 "items": items,
                 "html_preview": html_output,
             },
@@ -404,7 +477,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("[INFO] Weekly V3 erzeugt")
+    print("[INFO] Prüfdienstleister Weekly erzeugt")
     print("[INFO] weekly-data.json aktualisiert")
     print("[INFO] prueftechniker-weekly.xml aktualisiert")
 
