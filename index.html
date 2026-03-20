@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#b30000" />
+  <title>Prüftechniker Feed Hub</title>
+  <link rel="manifest" href="manifest.json" />
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --panel-2: #1e2430;
+      --text: #f5f7fb;
+      --muted: #aeb6c7;
+      --accent: #b30000;
+      --accent-2: #e63946;
+      --border: #2a3140;
+      --ok: #1f9d55;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #0d0f14, #121722 45%, #0e1117);
+      color: var(--text);
+    }
+    header {
+      padding: 18px 16px;
+      background: linear-gradient(135deg, var(--accent), #7d0000);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+    header p {
+      margin: 6px 0 0;
+      color: #ffe0e0;
+      font-size: .92rem;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: rgba(23, 26, 33, .95);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 1.02rem;
+    }
+    .muted {
+      color: var(--muted);
+      font-size: .92rem;
+    }
+    .filters, .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 14px;
+    }
+    button, .btn {
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button.active {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      background: #11151d;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin: 8px 0 10px;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .status {
+      border-left: 4px solid var(--ok);
+      background: #11261a;
+      color: #c9f7db;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .feed-list {
+      display: grid;
+      gap: 12px;
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(30,36,48,.92), rgba(23,26,33,.92));
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: .84rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .tag {
+      padding: 4px 8px;
+      background: #101520;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+    .weekly {
+      border: 1px solid #5c1010;
+      background: linear-gradient(180deg, rgba(179,0,0,.16), rgba(23,26,33,.92));
+    }
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 30px 12px;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 640px) {
+      .row { grid-template-columns: 1fr; }
+    }
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: .85rem;
+      padding: 24px 16px 40px;
+    }
+    code.inline {
+      background: #0f141d;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🔧 Prüftechniker Feed Hub</h1>
+    <p>RSS-Feeds + automatisch eingebundenes Weekly-Update</p>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+      <aside class="panel">
+        <h2>Weekly-Integration</h2>
+        <div class="status">Das Weekly wird automatisch angezeigt, sobald dein RSS-Feed online erreichbar ist.</div>
+        <label for="weeklyFeedUrl">URL deines Weekly-RSS-Feeds</label>
+        <input id="weeklyFeedUrl" type="text" placeholder="z. B. https://deinname.github.io/prueftechniker-weekly.xml" />
+        <button id="saveFeedBtn">Feed speichern</button>
+        <p class="muted">Die URL wird lokal im Browser gespeichert. Der Bereich „Weekly“ zieht dann automatisch die neuesten Einträge.</p>
+
+        <h2 style="margin-top:18px;">Fallback ohne Hosting</h2>
+        <p class="muted">Solange dein RSS-Feed noch nicht online ist, kannst du Weekly-Einträge manuell hinterlegen.</p>
+        <label for="manualTitle">Titel</label>
+        <input id="manualTitle" type="text" placeholder="z. B. Weekly Update KW 12/2026" />
+        <label for="manualCategory">Bereich</label>
+        <select id="manualCategory">
+          <option value="weekly">Weekly</option>
+          <option value="normen">Normen</option>
+          <option value="geraete">Geräte</option>
+          <option value="praxis">Praxis</option>
+        </select>
+        <label for="manualLink">Link</label>
+        <input id="manualLink" type="text" placeholder="Optionaler Link zur Quelle oder zum Online-Report" />
+        <label for="manualText">Kurzinhalt</label>
+        <textarea id="manualText" placeholder="Kurze Zusammenfassung des Wochen-Updates..."></textarea>
+        <button id="addManualBtn">Eintrag hinzufügen</button>
+        <button id="clearManualBtn" style="margin-top:8px;">Manuelle Einträge löschen</button>
+
+        <h2 style="margin-top:18px;">Quellen</h2>
+        <div class="quick-links">
+          <a class="btn" href="https://publikationen.dguv.de/" target="_blank" rel="noopener noreferrer">DGUV</a>
+          <a class="btn" href="https://www.baua.de/DE/Angebote/Regelwerk/TRBS/TRBS.html" target="_blank" rel="noopener noreferrer">BAuA / TRBS</a>
+          <a class="btn" href="https://www.vde-verlag.de/" target="_blank" rel="noopener noreferrer">VDE Verlag</a>
+          <a class="btn" href="https://www.gossenmetrawatt.de/" target="_blank" rel="noopener noreferrer">Gossen Metrawatt</a>
+          <a class="btn" href="https://www.fluke.com/" target="_blank" rel="noopener noreferrer">Fluke</a>
+          <a class="btn" href="https://www.benning.de/" target="_blank" rel="noopener noreferrer">Benning</a>
+        </div>
+      </aside>
+
+      <main class="panel">
+        <h2>Feed-Übersicht</h2>
+        <p class="muted">Filtere nach Themen. Weekly-Einträge stehen immer oben.</p>
+        <div class="filters">
+          <button class="active" data-filter="all">Alle</button>
+          <button data-filter="weekly">Weekly</button>
+          <button data-filter="normen">Normen</button>
+          <button data-filter="geraete">Geräte</button>
+          <button data-filter="praxis">Praxis</button>
+        </div>
+        <div class="row">
+          <input id="searchInput" type="text" placeholder="Suchen nach Titel, Quelle oder Inhalt..." />
+          <div class="muted" style="display:flex;align-items:center;justify-content:flex-end;">Hinweis: Fremde RSS-Feeds können je nach Server CORS blockieren. Dein eigener GitHub-Pages-Feed funktioniert zuverlässig.</div>
+        </div>
+        <div id="feedList" class="feed-list"></div>
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    PWA-fähig. Für die automatische Weekly-Anzeige trägst du einfach die URL deines RSS-Feeds ein. Beispiel: <code class="inline">https://deinname.github.io/prueftechniker-weekly.xml</code>
+  </footer>
+
+  <script>
+    const staticSources = [
+      {
+        title: 'DGUV Publikationen',
+        source: 'Offizielle Quelle',
+        type: 'normen',
+        link: 'https://publikationen.dguv.de/',
+        description: 'DGUV Vorschriften, Regeln und Informationen – relevant für DGUV Vorschrift 3 und Prüfpraxis.'
+      },
+      {
+        title: 'BAuA – TRBS Übersicht',
+        source: 'Offizielle Quelle',
+        type: 'normen',
+        link: 'https://www.baua.de/DE/Angebote/Regelwerk/TRBS/TRBS.html',
+        description: 'Technische Regeln für Betriebssicherheit, z. B. TRBS 1201 und angrenzende Themen.'
+      },
+      {
+        title: 'VDE Verlag',
+        source: 'Normen',
+        type: 'normen',
+        link: 'https://www.vde-verlag.de/',
+        description: 'Offizielle Normeninfos und Standardseiten zu DIN EN 50678, DIN EN 50699 und weiteren Normen.'
+      },
+      {
+        title: 'Gossen Metrawatt',
+        source: 'Hersteller',
+        type: 'geraete',
+        link: 'https://www.gossenmetrawatt.de/',
+        description: 'Produktnews, SECUTEST, PROFITEST, IZYTRONIQ, Firmware und Anwendungsinfos.'
+      },
+      {
+        title: 'Fluke Blog & Ressourcen',
+        source: 'Hersteller',
+        type: 'geraete',
+        link: 'https://www.fluke.com/',
+        description: 'Messgeräte, Sicherheitsinfos, Anwendungsbeispiele und Produktneuheiten.'
+      },
+      {
+        title: 'Benning Prüftechnik',
+        source: 'Hersteller',
+        type: 'geraete',
+        link: 'https://www.benning.de/',
+        description: 'Infos zu Gerätetestern, Messtechnik und Prüfprodukten für den elektrotechnischen Alltag.'
+      },
+      {
+        title: 'Praxisnotiz: Prüffristen und Dokumentation',
+        source: 'Praxis',
+        type: 'praxis',
+        link: 'https://publikationen.dguv.de/',
+        description: 'Gefährdungsbeurteilung, Prüffristen und saubere Dokumentation bleiben für Prüftechniker zentral.'
+      }
+    ];
+
+    let currentFilter = 'all';
+    let allItems = [];
+
+    const feedList = document.getElementById('feedList');
+    const weeklyFeedUrlInput = document.getElementById('weeklyFeedUrl');
+    const searchInput = document.getElementById('searchInput');
+
+    function loadStoredSettings() {
+      weeklyFeedUrlInput.value = localStorage.getItem('weeklyFeedUrl') || '';
+    }
+
+    function saveFeedUrl() {
+      const url = weeklyFeedUrlInput.value.trim();
+      localStorage.setItem('weeklyFeedUrl', url);
+      buildFeed();
+      alert('Feed-URL gespeichert.');
+    }
+
+    function getManualEntries() {
+      try {
+        return JSON.parse(localStorage.getItem('manualWeeklyEntries') || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function saveManualEntries(entries) {
+      localStorage.setItem('manualWeeklyEntries', JSON.stringify(entries));
+    }
+
+    function addManualEntry() {
+      const title = document.getElementById('manualTitle').value.trim();
+      const type = document.getElementById('manualCategory').value;
+      const link = document.getElementById('manualLink').value.trim();
+      const description = document.getElementById('manualText').value.trim();
+
+      if (!title || !description) {
+        alert('Bitte mindestens Titel und Kurzinhalt eintragen.');
+        return;
+      }
+
+      const entries = getManualEntries();
+      entries.unshift({
+        title,
+        type,
+        source: type === 'weekly' ? 'Manuelles Weekly' : 'Manueller Eintrag',
+        link,
+        description,
+        pubDate: new Date().toISOString(),
+        weekly: type === 'weekly'
+      });
+      saveManualEntries(entries);
+
+      document.getElementById('manualTitle').value = '';
+      document.getElementById('manualLink').value = '';
+      document.getElementById('manualText').value = '';
+      document.getElementById('manualCategory').value = 'weekly';
+      buildFeed();
+    }
+
+    function clearManualEntries() {
+      localStorage.removeItem('manualWeeklyEntries');
+      buildFeed();
+    }
+
+    async function loadWeeklyFeed() {
+      const url = (localStorage.getItem('weeklyFeedUrl') || '').trim();
+      if (!url) return [];
+
+      try {
+        const res = await fetch(url);
+        const xmlText = await res.text();
+        const xml = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const items = [...xml.querySelectorAll('item')].map(item => ({
+          title: item.querySelector('title')?.textContent || 'Ohne Titel',
+          source: 'Weekly RSS',
+          type: 'weekly',
+          link: item.querySelector('link')?.textContent || '',
+          description: item.querySelector('description')?.textContent || '',
+          pubDate: item.querySelector('pubDate')?.textContent || '',
+          weekly: true
+        }));
+        return items;
+      } catch (e) {
+        return [{
+          title: 'Weekly-Feed konnte nicht geladen werden',
+          source: 'Systemhinweis',
+          type: 'weekly',
+          link: '',
+          description: 'Prüfe die Feed-URL oder hoste die XML-Datei öffentlich, z. B. über GitHub Pages.',
+          pubDate: new Date().toISOString(),
+          weekly: true
+        }];
+      }
+    }
+
+    function normalizeStaticItems(items) {
+      return items.map(x => ({ ...x, pubDate: x.pubDate || '' }));
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return 'ohne Datum';
+      const d = new Date(dateStr);
+      return isNaN(d.getTime()) ? dateStr : d.toLocaleString('de-DE');
+    }
+
+    function sortItems(items) {
+      return items.sort((a, b) => {
+        if (!!b.weekly !== !!a.weekly) return (b.weekly ? 1 : 0) - (a.weekly ? 1 : 0);
+        const da = new Date(a.pubDate || 0).getTime() || 0;
+        const db = new Date(b.pubDate || 0).getTime() || 0;
+        return db - da;
+      });
+    }
+
+    function renderFeed() {
+      const query = searchInput.value.trim().toLowerCase();
+      const items = allItems.filter(item => {
+        const filterOk = currentFilter === 'all' || item.type === currentFilter;
+        const hay = `${item.title} ${item.source} ${item.description}`.toLowerCase();
+        const searchOk = !query || hay.includes(query);
+        return filterOk && searchOk;
+      });
+
+      if (!items.length) {
+        feedList.innerHTML = '<div class="empty">Keine passenden Einträge gefunden.</div>';
+        return;
+      }
+
+      feedList.innerHTML = items.map(item => `
+        <article class="card ${item.weekly ? 'weekly' : ''}">
+          <h3>${escapeHtml(item.title)}</h3>
+          <div class="meta">
+            <span class="tag">${escapeHtml(item.source)}</span>
+            <span class="tag">${escapeHtml(item.type)}</span>
+            <span class="tag">${escapeHtml(formatDate(item.pubDate))}</span>
+          </div>
+          <div>${escapeHtml(item.description).replace(/\n/g, '<br>')}</div>
+          ${item.link ? `<p style="margin-top:12px;"><a class="btn" href="${escapeAttribute(item.link)}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a></p>` : ''}
+        </article>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function escapeAttribute(str) {
+      return escapeHtml(str);
+    }
+
+    async function buildFeed() {
+      const weeklyItems = await loadWeeklyFeed();
+      const manualItems = getManualEntries();
+      allItems = sortItems([
+        ...weeklyItems,
+        ...manualItems,
+        ...normalizeStaticItems(staticSources)
+      ]);
+      renderFeed();
+    }
+
+    document.getElementById('saveFeedBtn').addEventListener('click', saveFeedUrl);
+    document.getElementById('addManualBtn').addEventListener('click', addManualEntry);
+    document.getElementById('clearManualBtn').addEventListener('click', clearManualEntries);
+    searchInput.addEventListener('input', renderFeed);
+
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderFeed();
+      });
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    loadStoredSettings();
+    buildFeed();
+  </script>
+</body>
+</html>

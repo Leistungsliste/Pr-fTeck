@@ -1,0 +1,10 @@
+{
+  "name": "Prüftechniker Feed Hub",
+  "short_name": "PrüfFeed",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#b30000",
+  "description": "Feed-Hub für Prüftechniker mit Weekly-Integration, Quellen und Praxislinks.",
+  "icons": []
+}
