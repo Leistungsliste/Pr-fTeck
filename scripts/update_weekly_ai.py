@@ -1,8 +1,6 @@
 import json
-import os
 import re
 import html
-import sys
 from pathlib import Path
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -16,9 +14,6 @@ REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
 
-OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions"
-OPENAI_MODEL = "gpt-4.1-mini"
-
 USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/1.0)"
 
 SOURCES = [
@@ -27,7 +22,8 @@ SOURCES = [
         "feed_url": "https://publikationen.dguv.de/rss.xml",
         "category": "normen",
         "fallback_url": "https://publikationen.dguv.de/",
-        "max_items": 3,
+        "max_items": 4,
+        "priority": 1,
     },
     {
         "name": "BAuA Presse",
@@ -35,6 +31,7 @@ SOURCES = [
         "category": "normen",
         "fallback_url": "https://www.baua.de/DE/Service/Presse/Presse.html",
         "max_items": 3,
+        "priority": 2,
     },
     {
         "name": "VDE News",
@@ -42,6 +39,7 @@ SOURCES = [
         "category": "normen",
         "fallback_url": "https://www.vde.com/de",
         "max_items": 3,
+        "priority": 3,
     },
     {
         "name": "Fluke Blog",
@@ -49,13 +47,52 @@ SOURCES = [
         "category": "geraete",
         "fallback_url": "https://www.fluke.com/en/learn/blog",
         "max_items": 2,
+        "priority": 4,
     },
 ]
 
-STATIC_PRACTICE_HINTS = [
-    "Für Prüftechniker sind vor allem Änderungen mit Auswirkung auf Prüffristen, Dokumentation, Normenumstellungen und Gerätesoftware relevant.",
-    "Herstellerquellen sind nützlich für Gerätefunktionen und Softwarestände, offizielle Quellen bleiben aber maßgeblich für die fachliche Einordnung.",
-    "Neue Beiträge sollten darauf geprüft werden, ob sie OVV, ortsfeste Anlagen, Maschinenprüfung oder nur Produktmarketing betreffen.",
+KEYWORDS_HIGH = [
+    "dguv",
+    "trbs",
+    "betrsichv",
+    "vde",
+    "din en 50678",
+    "din en 50699",
+    "prüfung",
+    "prüffrist",
+    "sicherheit",
+    "elektrische anlagen",
+    "betriebsmittel",
+]
+
+KEYWORDS_MEDIUM = [
+    "software",
+    "secutest",
+    "izytroniq",
+    "firmware",
+    "messgerät",
+    "gerätetester",
+    "kalibrierung",
+    "update",
+]
+
+PRACTICE_HINTS = [
+    "Prüffristen und Prüfumfang sollten immer nachvollziehbar aus Gefährdungsbeurteilung, Einsatzbedingungen und Erfahrung abgeleitet werden.",
+    "Bei Normen- oder Softwareänderungen ist entscheidend, ob sich daraus konkrete Änderungen für Prüfabläufe, Dokumentation oder Grenzwerte ergeben.",
+    "Herstellerbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.",
+]
+
+TITLE_HINTS = [
+    ("0701", "Kann für Reparaturprüfung bzw. Normenumfeld tragbarer Geräte relevant sein."),
+    ("0702", "Kann für Wiederholungsprüfung bzw. Normenumfeld tragbarer Geräte relevant sein."),
+    ("50678", "Betrifft typischerweise das aktuelle Normenumfeld für Prüfungen nach Reparatur."),
+    ("50699", "Betrifft typischerweise das aktuelle Normenumfeld für Wiederholungsprüfungen."),
+    ("TRBS", "Kann Auswirkungen auf Prüforganisation, befähigte Personen oder Prüftiefe haben."),
+    ("DGUV", "Oft direkt relevant für Prüfpraxis und betriebliche Anforderungen."),
+    ("VDE", "Kann normativ oder fachlich für Prüfabläufe relevant sein."),
+    ("Fluke", "Eher geräte- oder herstellerbezogen; Praxisnutzen prüfen."),
+    ("Gossen", "Eher geräte- oder softwarebezogen; Praxisnutzen prüfen."),
+    ("IZYTRONIQ", "Meist relevant für Dokumentation, Verwaltung und Prüfsoftware."),
 ]
 
 
@@ -74,22 +111,73 @@ def strip_html(raw_html: str) -> str:
     return text.strip()
 
 
-def truncate(text: str, max_len: int = 1600) -> str:
+def truncate(text: str, max_len: int = 500) -> str:
     text = (text or "").strip()
     return text[:max_len] + ("…" if len(text) > max_len else "")
+
+
+def normalize_date(entry) -> str:
+    if entry.get("published_parsed"):
+        try:
+            dt = datetime(*entry.published_parsed[:6], tzinfo=timezone.utc)
+            return dt.date().isoformat()
+        except Exception:
+            return ""
+    return ""
 
 
 def fetch_page_excerpt(url: str) -> str:
     try:
         response = requests.get(
             url,
-            timeout=20,
+            timeout=15,
             headers={"User-Agent": USER_AGENT},
         )
         response.raise_for_status()
-        return truncate(strip_html(response.text), 1600)
+        return truncate(strip_html(response.text), 900)
     except Exception as exc:
         return f"Seite konnte nicht geladen werden: {exc}"
+
+
+def score_item(title: str, summary: str, category: str, source_priority: int) -> tuple[int, str]:
+    text = f"{title} {summary}".lower()
+    score = 0
+
+    for kw in KEYWORDS_HIGH:
+        if kw in text:
+            score += 3
+
+    for kw in KEYWORDS_MEDIUM:
+        if kw in text:
+            score += 1
+
+    if category == "normen":
+        score += 2
+
+    score += max(0, 5 - source_priority)
+
+    if score >= 10:
+        level = "Hoch"
+    elif score >= 6:
+        level = "Mittel"
+    else:
+        level = "Info"
+
+    return score, level
+
+
+def derive_practical_note(title: str, summary: str, category: str) -> str:
+    hay = f"{title} {summary}"
+
+    for needle, note in TITLE_HINTS:
+        if needle.lower() in hay.lower():
+            return note
+
+    if category == "normen":
+        return "Auf mögliche Auswirkungen auf Prüfabläufe, Prüffristen und Dokumentation prüfen."
+    if category == "geraete":
+        return "Prüfen, ob das Thema für eingesetzte Messgeräte, Software oder Arbeitsabläufe praktisch relevant ist."
+    return "Praxisrelevanz im Zusammenhang mit deinem konkreten Prüfbereich prüfen."
 
 
 def parse_feed(source: dict) -> list[dict]:
@@ -100,27 +188,29 @@ def parse_feed(source: dict) -> list[dict]:
         title = (entry.get("title") or "").strip()
         link = (entry.get("link") or source["fallback_url"]).strip()
         summary = strip_html(entry.get("summary") or entry.get("description") or "")
+        published = normalize_date(entry)
 
-        published = ""
-        if entry.get("published_parsed"):
-            try:
-                dt = datetime(*entry.published_parsed[:6], tzinfo=timezone.utc)
-                published = dt.date().isoformat()
-            except Exception:
-                published = ""
+        if not title:
+            continue
 
-        if title:
-            items.append(
-                {
-                    "source": source["name"],
-                    "category": source["category"],
-                    "title": title,
-                    "link": link,
-                    "summary": truncate(summary, 900),
-                    "published": published,
-                    "page_excerpt": fetch_page_excerpt(link),
-                }
-            )
+        page_excerpt = fetch_page_excerpt(link)
+        score, level = score_item(title, summary, source["category"], source["priority"])
+        practical_note = derive_practical_note(title, summary, source["category"])
+
+        items.append(
+            {
+                "source": source["name"],
+                "category": source["category"],
+                "title": title,
+                "link": link,
+                "summary": truncate(summary, 700),
+                "published": published,
+                "page_excerpt": truncate(page_excerpt, 700),
+                "score": score,
+                "level": level,
+                "practical_note": practical_note,
+            }
+        )
 
     return items
 
@@ -144,125 +234,87 @@ def collect_items() -> list[dict]:
                     "summary": f"Automatischer Hinweis: Feed-Laden fehlgeschlagen ({exc}).",
                     "published": "",
                     "page_excerpt": "",
+                    "score": 0,
+                    "level": "Info",
+                    "practical_note": "Quelle später erneut prüfen.",
                 }
             )
 
-    return collected
+    collected.sort(key=lambda x: (x["score"], x["published"]), reverse=True)
+    return collected[:12]
 
 
-def build_ai_prompt(items: list[dict]) -> str:
-    lines = []
-    lines.append("Erstelle ein deutsches Weekly für Prüftechniker.")
-    lines.append("Zielgruppe: Prüftechniker für elektrische Prüfungen, Betriebsmittel, Anlagen, Normenumfeld.")
-    lines.append("Wichtig: Keine erfundenen Fakten. Nur vorsichtige, nützliche Formulierungen.")
-    lines.append("Wenn Informationen unklar sind, formuliere zurückhaltend.")
-    lines.append("")
-    lines.append("Ausgabeformat:")
-    lines.append("- Reines HTML")
-    lines.append("- Kein Markdown")
-    lines.append("- Nutze genau diese Struktur:")
-    lines.append("  <h3>Prüftechniker Weekly</h3>")
-    lines.append("  <p>Kurze Einleitung</p>")
-    lines.append("  <h4>Offizielle Quellen / Normen / Regeln</h4><ul>...</ul>")
-    lines.append("  <h4>Messgeräte / Hersteller</h4><ul>...</ul>")
-    lines.append("  <h4>Praxisrelevanz</h4><ul>...</ul>")
-    lines.append("  <h4>Quellen</h4><ul>...</ul>")
-    lines.append("")
-    lines.append("Praxis-Hinweise, die berücksichtigt werden sollen:")
-    for hint in STATIC_PRACTICE_HINTS:
-        lines.append(f"- {hint}")
-    lines.append("")
-    lines.append("Hier sind die gesammelten Quellen:")
-    lines.append("")
+def build_weekly_html(items: list[dict], generated: datetime) -> str:
+    normen = [x for x in items if x["category"] == "normen"]
+    geraete = [x for x in items if x["category"] == "geraete"]
 
-    for idx, item in enumerate(items, start=1):
-        lines.append(f"Quelle {idx}")
-        lines.append(f"Quelle-Name: {item['source']}")
-        lines.append(f"Kategorie: {item['category']}")
-        lines.append(f"Titel: {item['title']}")
-        lines.append(f"Link: {item['link']}")
-        lines.append(f"Veröffentlicht: {item['published']}")
-        lines.append(f"Feed-Zusammenfassung: {item['summary']}")
-        lines.append(f"Seitenauszug: {item['page_excerpt']}")
-        lines.append("")
-
-    return "\n".join(lines)
-
-
-def call_openai(prompt: str) -> str:
-    api_key = os.environ.get("OPENAI_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("OPENAI_API_KEY fehlt oder ist leer.")
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-    }
-
-    payload = {
-        "model": OPENAI_MODEL,
-        "messages": [
-            {
-                "role": "system",
-                "content": (
-                    "Du bist ein Fachredakteur für Prüftechniker. "
-                    "Schreibe präzise, vorsichtig, hilfreich und ohne Halluzinationen. "
-                    "Nutze nur die bereitgestellten Informationen und liefere HTML."
-                ),
-            },
-            {
-                "role": "user",
-                "content": prompt,
-            },
-        ],
-        "temperature": 0.3,
-    }
-
-    print("[INFO] Sende Anfrage an OpenAI ...")
-
-    response = requests.post(
-        OPENAI_CHAT_URL,
-        headers=headers,
-        json=payload,
-        timeout=120,
+    intro = (
+        "Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. "
+        "Die Einträge sind nach vermuteter Relevanz für Prüftechniker vorsortiert."
     )
 
-    print(f"[INFO] OpenAI HTTP-Status: {response.status_code}")
+    blocks = []
+    blocks.append("<h3>Prüftechniker Weekly</h3>")
+    blocks.append(f"<p>{safe_text(intro)} Stand: {generated.strftime('%d.%m.%Y %H:%M UTC')}.</p>")
 
-    if response.status_code != 200:
-        body_preview = response.text[:2000]
-        raise RuntimeError(f"OpenAI API Fehler {response.status_code}: {body_preview}")
+    blocks.append("<h4>Offizielle Quellen / Normen / Regeln</h4>")
+    if normen:
+        blocks.append("<ul>")
+        for item in normen[:6]:
+            blocks.append(
+                "<li>"
+                f"<b>{safe_text(item['title'])}</b> "
+                f"(<i>{safe_text(item['level'])}</i>)"
+                "<br>"
+                f"{safe_text(item['summary'] or 'Keine Kurzbeschreibung verfügbar.')}"
+                "<br>"
+                f"<small>Praxis: {safe_text(item['practical_note'])}</small>"
+                "</li>"
+            )
+        blocks.append("</ul>")
+    else:
+        blocks.append("<p>Diese Woche keine normenbezogenen Einträge gefunden.</p>")
 
-    data = response.json()
+    blocks.append("<h4>Messgeräte / Hersteller</h4>")
+    if geraete:
+        blocks.append("<ul>")
+        for item in geraete[:5]:
+            blocks.append(
+                "<li>"
+                f"<b>{safe_text(item['title'])}</b> "
+                f"(<i>{safe_text(item['level'])}</i>)"
+                "<br>"
+                f"{safe_text(item['summary'] or 'Keine Kurzbeschreibung verfügbar.')}"
+                "<br>"
+                f"<small>Praxis: {safe_text(item['practical_note'])}</small>"
+                "</li>"
+            )
+        blocks.append("</ul>")
+    else:
+        blocks.append("<p>Diese Woche keine gerätebezogenen Einträge gefunden.</p>")
 
-    try:
-        text = data["choices"][0]["message"]["content"]
-    except Exception:
-        raise RuntimeError(f"Unerwartete API-Antwort: {json.dumps(data)[:2000]}")
-
-    if not text or not text.strip():
-        raise RuntimeError("Keine Textausgabe von der OpenAI API erhalten.")
-
-    print("[INFO] KI-Zusammenfassung erfolgreich erzeugt.")
-    return text.strip()
-
-
-def build_fallback_html(items: list[dict], reason: str) -> str:
-    blocks = [
-        "<h3>Prüftechniker Weekly</h3>",
-        "<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>",
-        f"<p><b>Fehler:</b> {safe_text(reason)}</p>",
-        "<h4>Quellen</h4>",
-        "<ul>",
-    ]
-
-    for item in items:
-        title = safe_text(item["title"])
-        source = safe_text(item["source"])
-        link = safe_text(item["link"])
-        blocks.append(f'<li><a href="{link}">{title}</a> – {source}</li>')
-
+    blocks.append("<h4>Praxisrelevanz</h4>")
+    blocks.append("<ul>")
+    for hint in PRACTICE_HINTS:
+        blocks.append(f"<li>{safe_text(hint)}</li>")
+    if items:
+        top = items[0]
+        blocks.append(
+            f"<li>Höchste automatische Relevanz diese Woche: "
+            f"<b>{safe_text(top['title'])}</b> "
+            f"({safe_text(top['source'])}, Einstufung: {safe_text(top['level'])}).</li>"
+        )
     blocks.append("</ul>")
+
+    blocks.append("<h4>Quellen</h4>")
+    blocks.append("<ul>")
+    for item in items:
+        blocks.append(
+            f'<li><a href="{safe_text(item["link"])}">{safe_text(item["title"])}</a> '
+            f'– {safe_text(item["source"])} ({safe_text(item["category"])})</li>'
+        )
+    blocks.append("</ul>")
+
     return "\n".join(blocks)
 
 
@@ -276,7 +328,7 @@ def build_xml(html_description: str, generated: datetime) -> str:
   <channel>
     <title>Prüftechniker Weekly Update</title>
     <link>{REPO_BASE_URL}/prueftechniker-weekly.xml</link>
-    <description>Automatisch erzeugtes Weekly mit KI-Zusammenfassung zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
+    <description>Kostenlos automatisch erzeugtes Weekly zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
     <language>de-de</language>
     <lastBuildDate>{pub_date}</lastBuildDate>
     <ttl>10080</ttl>
@@ -298,31 +350,18 @@ def build_xml(html_description: str, generated: datetime) -> str:
 def main():
     generated = now_utc()
     items = collect_items()
-    prompt = build_ai_prompt(items)
-
-    status = "ok"
-    error_message = ""
-
-    try:
-        ai_html = call_openai(prompt)
-    except Exception as exc:
-        error_message = str(exc)
-        print(f"[ERROR] KI-Zusammenfassung fehlgeschlagen: {error_message}", file=sys.stderr)
-        ai_html = build_fallback_html(items, error_message)
-        status = f"fallback: {error_message}"
-
-    xml = build_xml(ai_html, generated)
+    html_output = build_weekly_html(items, generated)
+    xml = build_xml(html_output, generated)
 
     OUTPUT_XML.write_text(xml, encoding="utf-8")
     OUTPUT_JSON.write_text(
         json.dumps(
             {
                 "generated_at": generated.isoformat(),
-                "status": status,
-                "error": error_message,
-                "model": OPENAI_MODEL,
+                "status": "ok-free-mode",
+                "mode": "free-no-api",
                 "items": items,
-                "html_preview": ai_html,
+                "html_preview": html_output,
             },
             ensure_ascii=False,
             indent=2,
@@ -330,7 +369,8 @@ def main():
         encoding="utf-8",
     )
 
-    print(f"[INFO] weekly-data.json geschrieben, Status: {status}")
+    print("[INFO] Kostenloses Weekly erzeugt")
+    print("[INFO] weekly-data.json aktualisiert")
     print("[INFO] prueftechniker-weekly.xml aktualisiert")
 
 
