@@ -14,7 +14,7 @@ REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
 
-USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/2.0)"
 
 SOURCES = [
     {
@@ -244,9 +244,36 @@ def collect_items() -> list[dict]:
     return collected[:12]
 
 
+def entry_line(item: dict) -> str:
+    summary = item.get("summary") or item.get("page_excerpt") or "Keine Kurzbeschreibung verfügbar."
+    return (
+        "<li>"
+        f"<b>{safe_text(item['title'])}</b> "
+        f"(<i>{safe_text(item['level'])}</i>, {safe_text(item['source'])})"
+        "<br>"
+        f"{safe_text(summary)}"
+        "<br>"
+        f"<small>Praxis: {safe_text(item['practical_note'])}</small>"
+        "</li>"
+    )
+
+
+def build_section(title: str, items: list[dict], empty_text: str) -> str:
+    blocks = [f"<h4>{safe_text(title)}</h4>"]
+    if items:
+        blocks.append("<ul>")
+        for item in items:
+            blocks.append(entry_line(item))
+        blocks.append("</ul>")
+    else:
+        blocks.append(f"<p>{safe_text(empty_text)}</p>")
+    return "\n".join(blocks)
+
+
 def build_weekly_html(items: list[dict], generated: datetime) -> str:
     normen = [x for x in items if x["category"] == "normen"]
     geraete = [x for x in items if x["category"] == "geraete"]
+    praxis = [x for x in items if x["category"] == "praxis"]
 
     intro = (
         "Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. "
@@ -257,63 +284,55 @@ def build_weekly_html(items: list[dict], generated: datetime) -> str:
     blocks.append("<h3>Prüftechniker Weekly</h3>")
     blocks.append(f"<p>{safe_text(intro)} Stand: {generated.strftime('%d.%m.%Y %H:%M UTC')}.</p>")
 
-    blocks.append("<h4>Offizielle Quellen / Normen / Regeln</h4>")
-    if normen:
-        blocks.append("<ul>")
-        for item in normen[:6]:
-            blocks.append(
-                "<li>"
-                f"<b>{safe_text(item['title'])}</b> "
-                f"(<i>{safe_text(item['level'])}</i>)"
-                "<br>"
-                f"{safe_text(item['summary'] or 'Keine Kurzbeschreibung verfügbar.')}"
-                "<br>"
-                f"<small>Praxis: {safe_text(item['practical_note'])}</small>"
-                "</li>"
-            )
-        blocks.append("</ul>")
-    else:
-        blocks.append("<p>Diese Woche keine normenbezogenen Einträge gefunden.</p>")
-
-    blocks.append("<h4>Messgeräte / Hersteller</h4>")
-    if geraete:
-        blocks.append("<ul>")
-        for item in geraete[:5]:
-            blocks.append(
-                "<li>"
-                f"<b>{safe_text(item['title'])}</b> "
-                f"(<i>{safe_text(item['level'])}</i>)"
-                "<br>"
-                f"{safe_text(item['summary'] or 'Keine Kurzbeschreibung verfügbar.')}"
-                "<br>"
-                f"<small>Praxis: {safe_text(item['practical_note'])}</small>"
-                "</li>"
-            )
-        blocks.append("</ul>")
-    else:
-        blocks.append("<p>Diese Woche keine gerätebezogenen Einträge gefunden.</p>")
-
-    blocks.append("<h4>Praxisrelevanz</h4>")
-    blocks.append("<ul>")
-    for hint in PRACTICE_HINTS:
-        blocks.append(f"<li>{safe_text(hint)}</li>")
-    if items:
-        top = items[0]
-        blocks.append(
-            f"<li>Höchste automatische Relevanz diese Woche: "
-            f"<b>{safe_text(top['title'])}</b> "
-            f"({safe_text(top['source'])}, Einstufung: {safe_text(top['level'])}).</li>"
+    blocks.append(
+        build_section(
+            "Offizielle Quellen / Normen / Regeln",
+            normen[:6],
+            "Diese Woche keine normenbezogenen Einträge gefunden.",
         )
-    blocks.append("</ul>")
+    )
+
+    blocks.append(
+        build_section(
+            "Messgeräte / Hersteller",
+            geraete[:5],
+            "Diese Woche keine gerätebezogenen Einträge gefunden.",
+        )
+    )
+
+    # Praxisbereich: erst echte Praxis-Einträge, dann allgemeine Hinweise
+    blocks.append("<h4>Praxisrelevanz</h4>")
+    if praxis:
+        blocks.append("<ul>")
+        for item in praxis[:4]:
+            blocks.append(entry_line(item))
+        for hint in PRACTICE_HINTS:
+            blocks.append(f"<li>{safe_text(hint)}</li>")
+        blocks.append("</ul>")
+    else:
+        blocks.append("<ul>")
+        for hint in PRACTICE_HINTS:
+            blocks.append(f"<li>{safe_text(hint)}</li>")
+        if items:
+            top = items[0]
+            blocks.append(
+                f"<li>Höchste automatische Relevanz diese Woche: "
+                f"<b>{safe_text(top['title'])}</b> "
+                f"({safe_text(top['source'])}, Einstufung: {safe_text(top['level'])}).</li>"
+            )
+        blocks.append("</ul>")
 
     blocks.append("<h4>Quellen</h4>")
-    blocks.append("<ul>")
-    for item in items:
-        blocks.append(
-            f'<li><a href="{safe_text(item["link"])}">{safe_text(item["title"])}</a> '
-            f'– {safe_text(item["source"])} ({safe_text(item["category"])})</li>'
-        )
-    blocks.append("</ul>")
+    if items:
+        blocks.append("<ul>")
+        for item in items:
+            blocks.append(
+                f'<li><a href="{safe_text(item["link"])}">{safe_text(item["title"])}</a> '
+                f'– {safe_text(item["source"])} ({safe_text(item["category"])})</li>'
+            )
+        blocks.append("</ul>")
+    else:
+        blocks.append("<p>Keine Quellen verfügbar.</p>")
 
     return "\n".join(blocks)
 
@@ -369,7 +388,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("[INFO] Kostenloses Weekly erzeugt")
+    print("[INFO] Weekly V2 erzeugt")
     print("[INFO] weekly-data.json aktualisiert")
     print("[INFO] prueftechniker-weekly.xml aktualisiert")
 
