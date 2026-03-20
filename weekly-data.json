@@ -1,35 +1,7 @@
 {
-  "mode": "free-no-api",
+  "generated_at": "2026-03-20T12:05:35.876046+00:00",
   "status": "ok-free-mode",
-  "generated_at": "2026-03-20T12:44:00Z",
-  "items": [
-    {
-      "title": "Neue DGUV Empfehlung zur Prüffrist",
-      "source": "DGUV",
-      "category": "normen",
-      "summary": "Neue Hinweise zur Festlegung von Prüffristen bei ortsveränderlichen Geräten.",
-      "link": "https://publikationen.dguv.de/",
-      "level": "Hoch",
-      "published": "2026-03-20"
-    },
-    {
-      "title": "Fluke stellt neues Messgerät vor",
-      "source": "Fluke",
-      "category": "geraete",
-      "summary": "Neues Prüfgerät mit erweiterten Funktionen für VDE 0701-0702.",
-      "link": "https://www.fluke.com/",
-      "level": "Info",
-      "published": "2026-03-20"
-    },
-    {
-      "title": "Praxis: Prüfdokumentation verbessern",
-      "source": "Fachartikel",
-      "category": "praxis",
-      "summary": "So strukturierst du deine Prüfberichte rechtssicher und nachvollziehbar.",
-      "link": "",
-      "level": "Mittel",
-      "published": "2026-03-20",
-      "practical_note": "Checklisten helfen enorm bei Wiederholprüfungen."
-    }
-  ]
+  "mode": "free-no-api",
+  "items": [],
+  "html_preview": "<h3>Prüftechniker Weekly</h3>\n<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. Die Einträge sind nach vermuteter Relevanz für Prüftechniker vorsortiert. Stand: 20.03.2026 12:05 UTC.</p>\n<h4>Offizielle Quellen / Normen / Regeln</h4>\n<p>Diese Woche keine normenbezogenen Einträge gefunden.</p>\n<h4>Messgeräte / Hersteller</h4>\n<p>Diese Woche keine gerätebezogenen Einträge gefunden.</p>\n<h4>Praxisrelevanz</h4>\n<ul>\n<li>Prüffristen und Prüfumfang sollten immer nachvollziehbar aus Gefährdungsbeurteilung, Einsatzbedingungen und Erfahrung abgeleitet werden.</li>\n<li>Bei Normen- oder Softwareänderungen ist entscheidend, ob sich daraus konkrete Änderungen für Prüfabläufe, Dokumentation oder Grenzwerte ergeben.</li>\n<li>Herstellerbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.</li>\n</ul>\n<h4>Quellen</h4>\n<p>Keine Quellen verfügbar.</p>"
 }
