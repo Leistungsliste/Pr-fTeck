@@ -1,0 +1,7 @@
+{
+  "generated_at": "2026-03-20T10:14:57.332898+00:00",
+  "status": "fallback: 429 Client Error: Too Many Requests for url: https://api.openai.com/v1/responses",
+  "model": "gpt-5.4",
+  "items": [],
+  "html_preview": "<h3>Prüftechniker Weekly</h3>\n<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>\n\n<h4>Quellen</h4><ul>\n</ul>"
+}

@@ -5,21 +5,19 @@
     <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
     <description>Automatisch erzeugtes Weekly mit KI-Zusammenfassung zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
     <language>de-de</language>
-    <lastBuildDate>Fri, 20 Mar 2026 08:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 10:14:57 +0000</lastBuildDate>
     <ttl>10080</ttl>
 
     <item>
-      <title>Prüftechniker Weekly – KI-Version vorbereitet</title>
+      <title>Prüftechniker Weekly – 20.03.2026</title>
       <link>https://leistungsliste.github.io/Pr-tleck/</link>
-      <guid>prueftechniker-weekly-ki-initial</guid>
-      <pubDate>Fri, 20 Mar 2026 08:00:00 GMT</pubDate>
+      <guid>prueftechniker-weekly-2026-03-20</guid>
+      <pubDate>Fri, 20 Mar 2026 10:14:57 +0000</pubDate>
       <description><![CDATA[
-<h3>KI-Weekly vorbereitet</h3>
-<p>Wenn die GitHub Action läuft und ein gültiger <code>OPENAI_API_KEY</code> als Repository Secret hinterlegt ist, wird diese Datei automatisch mit einer KI-Zusammenfassung aktualisiert.</p>
-<ul>
-  <li>Bereitstellung: GitHub Pages</li>
-  <li>Automatisierung: GitHub Actions</li>
-  <li>Zusammenfassung: OpenAI Responses API</li>
+<h3>Prüftechniker Weekly</h3>
+<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>
+
+<h4>Quellen</h4><ul>
 </ul>
       ]]></description>
     </item>
