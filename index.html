@@ -8,7 +8,6 @@
   <style>
     :root{
       --bg:#09101c;
-      --bg2:#101827;
       --card:#131d30;
       --card2:#19253b;
       --text:#f4f7fb;
@@ -19,6 +18,7 @@
       --green:#173a24;
       --green-border:#2ca45c;
       --blue:#5aa2ff;
+      --yellow:#ffcc66;
       --chip:#0f1a2f;
       --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:18px;
@@ -56,14 +56,14 @@
     }
 
     .wrap{
-      max-width:1100px;
+      max-width:1180px;
       margin:0 auto;
       padding:22px;
     }
 
     .grid{
       display:grid;
-      grid-template-columns:320px 1fr;
+      grid-template-columns:340px 1fr;
       gap:18px;
       align-items:start;
     }
@@ -88,6 +88,26 @@
       padding:12px;
       border-radius:12px;
       margin-bottom:14px;
+    }
+
+    .status-card{
+      background:#0d1628;
+      border:1px solid #304567;
+      border-radius:12px;
+      padding:12px;
+      margin-top:10px;
+      line-height:1.45;
+      font-size:14px;
+    }
+
+    .status-line{
+      margin:4px 0;
+      color:#dbe8ff;
+    }
+
+    .mode-free{
+      color:#9dffb5;
+      font-weight:bold;
     }
 
     .subtext{
@@ -201,10 +221,6 @@
       box-shadow:0 0 0 1px rgba(227,54,54,.18) inset;
     }
 
-    .card.error{
-      border:2px solid rgba(255,180,0,.65);
-    }
-
     .card h3{
       margin:0 0 8px;
       font-size:17px;
@@ -230,10 +246,28 @@
       padding:4px 10px;
     }
 
+    .chip-high{
+      border-color:#b13b3b;
+      color:#ffd5d5;
+      background:#2a1414;
+    }
+
+    .chip-medium{
+      border-color:#a88a2c;
+      color:#fff0c2;
+      background:#231d0b;
+    }
+
+    .chip-info{
+      border-color:#3c5b8f;
+      color:#d8e6ff;
+      background:#0f1c34;
+    }
+
     .desc{
       color:#eef3fb;
       margin:0 0 14px;
-      line-height:1.45;
+      line-height:1.5;
       white-space:pre-wrap;
     }
 
@@ -275,19 +309,33 @@
       margin:18px 0;
     }
 
-    .status-box{
+    .weekly-html{
       margin-top:10px;
-      padding:10px 12px;
-      border-radius:10px;
-      background:#0d1628;
-      border:1px solid #304567;
-      color:#d9e5f9;
-      font-size:13px;
-      line-height:1.4;
-      white-space:pre-wrap;
+      padding:12px;
+      border-radius:12px;
+      background:#10192b;
+      border:1px solid #31476e;
     }
 
-    @media (max-width: 900px){
+    .weekly-html h3, .weekly-html h4{
+      margin:0 0 10px;
+    }
+
+    .weekly-html p, .weekly-html li{
+      line-height:1.5;
+      color:#eef3fb;
+    }
+
+    .weekly-html ul{
+      margin:8px 0 12px 18px;
+      padding:0;
+    }
+
+    .weekly-html a{
+      color:#9bc4ff;
+    }
+
+    @media (max-width: 950px){
       .grid{
         grid-template-columns:1fr;
       }
@@ -313,17 +361,22 @@
         </div>
 
         <label for="weeklyFeedUrl">URL deines Weekly-RSS-Feeds</label>
-        <input id="weeklyFeedUrl" type="text" placeholder="https://deinname.github.io/projekt/prueftechniker-weekly.xml" />
+        <input id="weeklyFeedUrl" type="text" placeholder="https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml" />
 
         <div class="btnrow">
           <button class="btn-primary" id="saveFeedBtn">Feed speichern</button>
           <button class="btn-outline" id="loadFeedBtn">Jetzt laden</button>
         </div>
 
-        <div id="statusBox" class="status-box">Noch kein Feed geladen.</div>
+        <div class="status-card">
+          <div class="status-line"><strong>Modus:</strong> <span id="modeLabel" class="mode-free">wird geladen ...</span></div>
+          <div class="status-line"><strong>Status:</strong> <span id="statusLabel">–</span></div>
+          <div class="status-line"><strong>Letztes Update:</strong> <span id="generatedLabel">–</span></div>
+          <div class="status-line"><strong>Einträge:</strong> <span id="countLabel">–</span></div>
+        </div>
 
-        <p class="subtext">
-          Wichtig: Hier muss die <strong>direkte XML-Datei</strong> rein, nicht nur die normale Website-URL.
+        <p class="subtext" style="margin-top:12px;">
+          Wichtig: Hier muss die direkte XML-Datei rein, nicht nur die normale Website-URL.
         </p>
 
         <div class="divider"></div>
@@ -380,7 +433,7 @@
         </div>
 
         <div class="toolbar-note">
-          Hinweis: Externe RSS-Feeds können je nach Server/CORS blockieren. Dein eigener GitHub-Pages-Feed funktioniert am zuverlässigsten.
+          Hinweis: Fremde RSS-Feeds können je nach Server CORS blockieren. Dein eigener GitHub-Pages-Feed funktioniert am zuverlässigsten.
         </div>
 
         <div id="feedList" class="feed-list"></div>
@@ -402,7 +455,8 @@
         category: "normen",
         date: "",
         description: "DGUV Vorschriften, Regeln und Informationen – relevant für DGUV Vorschrift 3 und Prüfpraxis.",
-        link: "https://publikationen.dguv.de/"
+        link: "https://publikationen.dguv.de/",
+        level: "Info"
       },
       {
         id: "static-baua",
@@ -411,7 +465,8 @@
         category: "normen",
         date: "",
         description: "Technische Regeln für Betriebssicherheit, z. B. TRBS 1201 und angrenzende Themen.",
-        link: "https://www.baua.de/DE/Angebote/Regelwerk/TRBS/TRBS.html"
+        link: "https://www.baua.de/DE/Angebote/Regelwerk/TRBS/TRBS.html",
+        level: "Info"
       },
       {
         id: "static-vde",
@@ -420,25 +475,8 @@
         category: "normen",
         date: "",
         description: "Offizielle Normeninfos und Standardseiten zu DIN EN 50678, DIN EN 50699 und weiteren Normen.",
-        link: "https://www.vde-verlag.de/"
-      },
-      {
-        id: "static-gossen",
-        title: "Gossen Metrawatt News",
-        source: "Hersteller",
-        category: "geraete",
-        date: "",
-        description: "Produktneuheiten, Software, SECUTEST und IZYTRONIQ-relevante Informationen.",
-        link: "https://www.gossenmetrawatt.de/"
-      },
-      {
-        id: "static-benning",
-        title: "Benning Prüf- und Messtechnik",
-        source: "Hersteller",
-        category: "geraete",
-        date: "",
-        description: "Gerätetester, Produktübersicht und prüftechnische Informationen für den Praxisbereich.",
-        link: "https://www.benning.de/"
+        link: "https://www.vde-verlag.de/",
+        level: "Info"
       },
       {
         id: "static-fluke",
@@ -447,21 +485,14 @@
         category: "geraete",
         date: "",
         description: "Neue Geräte, Fachartikel und sicherheitsrelevante Beiträge aus der Messpraxis.",
-        link: "https://www.fluke.com/en/learn/blog"
-      },
-      {
-        id: "static-elektropraktiker",
-        title: "Elektropraktiker",
-        source: "Praxisquelle",
-        category: "praxis",
-        date: "",
-        description: "Praxisnahe Fachartikel zu Normen, Prüfungen, Elektroinstallation und Auslegung.",
-        link: "https://www.elektropraktiker.de/"
+        link: "https://www.fluke.com/en/learn/blog",
+        level: "Info"
       }
     ];
 
     let currentFilter = "all";
     let weeklyEntries = [];
+    let weeklyMeta = null;
 
     const weeklyFeedUrlInput = document.getElementById("weeklyFeedUrl");
     const manualTitleInput = document.getElementById("manualTitle");
@@ -470,7 +501,11 @@
     const manualContentInput = document.getElementById("manualContent");
     const searchInput = document.getElementById("searchInput");
     const feedList = document.getElementById("feedList");
-    const statusBox = document.getElementById("statusBox");
+
+    const modeLabel = document.getElementById("modeLabel");
+    const statusLabel = document.getElementById("statusLabel");
+    const generatedLabel = document.getElementById("generatedLabel");
+    const countLabel = document.getElementById("countLabel");
 
     function escapeHtml(str = "") {
       return str
@@ -491,7 +526,7 @@
       if (!dateString) return "";
       const d = new Date(dateString);
       if (isNaN(d.getTime())) return "";
-      return d.toLocaleDateString("de-DE");
+      return d.toLocaleDateString("de-DE") + ", " + d.toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"});
     }
 
     function getManualEntries() {
@@ -506,21 +541,47 @@
       localStorage.setItem(STORAGE_KEYS.manualEntries, JSON.stringify(entries));
     }
 
-    function setStatus(message) {
-      statusBox.textContent = message;
-    }
-
     function saveWeeklyFeedUrl() {
       const url = weeklyFeedUrlInput.value.trim();
       localStorage.setItem(STORAGE_KEYS.weeklyFeedUrl, url);
-      setStatus("Feed-URL gespeichert:\n" + (url || "(leer)"));
       alert("Feed-URL gespeichert.");
     }
 
     function loadSavedWeeklyFeedUrl() {
-      const saved = localStorage.getItem(STORAGE_KEYS.weeklyFeedUrl) || "";
+      const saved = localStorage.getItem(STORAGE_KEYS.weeklyFeedUrl) || "https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml";
       weeklyFeedUrlInput.value = saved;
       return saved;
+    }
+
+    function levelChip(level = "Info") {
+      const normalized = (level || "Info").toLowerCase();
+      if (normalized === "hoch") {
+        return `<span class="chip chip-high">Hoch</span>`;
+      }
+      if (normalized === "mittel") {
+        return `<span class="chip chip-medium">Mittel</span>`;
+      }
+      return `<span class="chip chip-info">Info</span>`;
+    }
+
+    function updateMetaUI() {
+      if (!weeklyMeta) {
+        modeLabel.textContent = "keine Daten";
+        statusLabel.textContent = "–";
+        generatedLabel.textContent = "–";
+        countLabel.textContent = "–";
+        return;
+      }
+
+      const mode = weeklyMeta.mode || "unbekannt";
+      const status = weeklyMeta.status || "–";
+      const generated = weeklyMeta.generated_at ? normalizeDate(weeklyMeta.generated_at) : "–";
+      const count = Array.isArray(weeklyMeta.items) ? weeklyMeta.items.length : 0;
+
+      modeLabel.textContent = mode === "free-no-api" ? "Kostenloser Modus aktiv" : mode;
+      statusLabel.textContent = status;
+      generatedLabel.textContent = generated;
+      countLabel.textContent = String(count);
     }
 
     function addManualEntry() {
@@ -542,7 +603,8 @@
         category,
         date: normalizeDate(new Date().toISOString()),
         description: content,
-        link: link || ""
+        link: link || "",
+        level: "Info"
       });
 
       setManualEntries(entries);
@@ -565,12 +627,12 @@
       const xml = parser.parseFromString(xmlText, "application/xml");
       const parserError = xml.querySelector("parsererror");
       if (parserError) {
-        throw new Error("XML-Parserfehler: Die Datei ist kein gültiges RSS/XML.");
+        throw new Error("XML konnte nicht gelesen werden.");
       }
 
       const items = Array.from(xml.querySelectorAll("item"));
       if (!items.length) {
-        throw new Error("Keine <item>-Einträge im Feed gefunden.");
+        return [];
       }
 
       return items.map((item, index) => {
@@ -578,7 +640,7 @@
         const link = item.querySelector("link")?.textContent?.trim() || "";
         const description = item.querySelector("description")?.textContent?.trim() || "";
         const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
-        const guid = item.querySelector("guid")?.textContent?.trim() || `weekly-${index}-${title}`;
+        const guid = item.querySelector("guid")?.textContent?.trim() || `weekly-${index}`;
 
         return {
           id: guid,
@@ -586,10 +648,24 @@
           source: "Weekly RSS",
           category: "weekly",
           date: normalizeDate(pubDate),
-          description: stripHtml(description).slice(0, 500) || "Kein Kurzinhalt vorhanden.",
-          link
+          description: stripHtml(description).slice(0, 500),
+          link,
+          rawHtml: description,
+          level: "Info"
         };
       });
+    }
+
+    async function loadWeeklyMeta(feedUrl) {
+      try {
+        const metaUrl = feedUrl.replace("prueftechniker-weekly.xml", "weekly-data.json");
+        const response = await fetch(metaUrl, { cache: "no-store" });
+        if (!response.ok) throw new Error("weekly-data.json nicht erreichbar");
+        weeklyMeta = await response.json();
+      } catch (e) {
+        weeklyMeta = null;
+      }
+      updateMetaUI();
     }
 
     async function loadWeeklyFeed() {
@@ -597,52 +673,45 @@
       weeklyEntries = [];
 
       if (!url) {
-        setStatus("Keine Feed-URL eingetragen.");
+        weeklyMeta = null;
+        updateMetaUI();
         render();
         return;
       }
 
       try {
-        setStatus("Lade Feed...\n" + url);
-
-        const response = await fetch(url, {
-          method: "GET",
-          cache: "no-store"
-        });
-
+        const response = await fetch(url, { cache: "no-store" });
         if (!response.ok) {
-          throw new Error("HTTP-Fehler " + response.status + " " + response.statusText);
+          throw new Error("Feed nicht erreichbar");
         }
 
         const text = await response.text();
-
-        if (!text.trim()) {
-          throw new Error("Die Datei ist leer.");
-        }
-
-        if (!text.includes("<rss") && !text.includes("<feed") && !text.includes("<item")) {
-          throw new Error("Die geladene Datei sieht nicht wie RSS/XML aus.");
-        }
-
         weeklyEntries = parseRssXml(text);
+        await loadWeeklyMeta(url);
 
-        setStatus(
-          "Feed erfolgreich geladen.\n" +
-          "URL: " + url + "\n" +
-          "Einträge: " + weeklyEntries.length
-        );
+        if (weeklyMeta && Array.isArray(weeklyMeta.items) && weeklyMeta.items.length) {
+          const sourceEntries = weeklyMeta.items.map((item, idx) => ({
+            id: "meta-" + idx + "-" + (item.title || idx),
+            title: item.title || "Ohne Titel",
+            source: item.source || "Quelle",
+            category: item.category || "weekly",
+            date: item.published || "",
+            description: item.summary || item.page_excerpt || "",
+            link: item.link || "",
+            level: item.level || "Info",
+            practical_note: item.practical_note || ""
+          }));
+
+          weeklyEntries = [...weeklyEntries, ...sourceEntries];
+        }
       } catch (error) {
-        const message =
-          "Feed konnte nicht geladen werden.\n" +
-          "URL: " + url + "\n" +
-          "Fehler: " + error.message + "\n\n" +
-          "Prüfe:\n" +
-          "1. Zeigt die URL direkt auf .../prueftechniker-weekly.xml?\n" +
-          "2. Ist die Datei über GitHub Pages öffentlich erreichbar?\n" +
-          "3. Liegt die Datei im selben Repo wie index.html?\n" +
-          "4. Ist die XML gültig?";
-
-        setStatus(message);
+        weeklyMeta = {
+          mode: "Fehler",
+          status: "Feed konnte nicht geladen werden",
+          generated_at: "",
+          items: []
+        };
+        updateMetaUI();
 
         weeklyEntries = [{
           id: "weekly-error",
@@ -650,8 +719,9 @@
           source: "Systemhinweis",
           category: "weekly",
           date: normalizeDate(new Date().toISOString()),
-          description: message,
-          link: url || ""
+          description: "Prüfe die Feed-URL oder hoste die XML-Datei öffentlich, z. B. über GitHub Pages.",
+          link: "",
+          level: "Info"
         }];
       }
 
@@ -679,7 +749,9 @@
         entry.source,
         entry.description,
         entry.category,
-        entry.date
+        entry.date,
+        entry.level,
+        entry.practical_note || ""
       ].join(" ").toLowerCase();
       return haystack.includes(term.toLowerCase());
     }
@@ -700,24 +772,32 @@
       }
 
       feedList.innerHTML = entries.map(entry => {
-        const extraClass =
-          entry.category === "weekly"
-            ? (entry.source === "Systemhinweis" ? "card weekly error" : "card weekly")
-            : "card";
-
+        const isWeeklyMain = entry.source === "Weekly RSS";
+        const cardClass = entry.category === "weekly" ? "card weekly" : "card";
         const linkButton = entry.link
           ? `<a href="${escapeHtml(entry.link)}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a>`
           : "";
 
+        const practice = entry.practical_note
+          ? `<p class="desc"><strong>Praxis:</strong> ${escapeHtml(entry.practical_note)}</p>`
+          : "";
+
+        const weeklyHtmlBlock = isWeeklyMain && entry.rawHtml
+          ? `<div class="weekly-html">${entry.rawHtml}</div>`
+          : "";
+
         return `
-          <article class="${extraClass}">
+          <article class="${cardClass}">
             <h3>${escapeHtml(entry.title)}</h3>
             <div class="chips">
               <span class="chip">${escapeHtml(entry.source || "Quelle")}</span>
               <span class="chip">${escapeHtml(entry.category)}</span>
               <span class="chip">${escapeHtml(entry.date || "ohne Datum")}</span>
+              ${levelChip(entry.level)}
             </div>
             <p class="desc">${escapeHtml(entry.description || "")}</p>
+            ${practice}
+            ${weeklyHtmlBlock}
             <div class="actions">
               ${linkButton}
             </div>
