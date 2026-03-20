@@ -1,7 +1,8 @@
 {
-  "generated_at": "2026-03-20T10:29:20.746388+00:00",
-  "status": "fallback: 429 Client Error: Too Many Requests for url: https://api.openai.com/v1/responses",
-  "model": "gpt-5.4",
+  "generated_at": "2026-03-20T10:36:37.203293+00:00",
+  "status": "fallback: OpenAI API Fehler 429: {\n  \"error\": {\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.\",\n    \"type\": \"insufficient_quota\",\n    \"param\": null,\n    \"code\": \"insufficient_quota\"\n  }\n}",
+  "error": "OpenAI API Fehler 429: {\n  \"error\": {\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.\",\n    \"type\": \"insufficient_quota\",\n    \"param\": null,\n    \"code\": \"insufficient_quota\"\n  }\n}",
+  "model": "gpt-4.1-mini",
   "items": [],
-  "html_preview": "<h3>Prüftechniker Weekly</h3>\n<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>\n\n<h4>Quellen</h4><ul>\n</ul>"
+  "html_preview": "<h3>Prüftechniker Weekly</h3>\n<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>\n\n<p><b>Fehler:</b> OpenAI API Fehler 429: {\n  &quot;error&quot;: {\n    &quot;message&quot;: &quot;You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.&quot;,\n    &quot;type&quot;: &quot;insufficient_quota&quot;,\n    &quot;param&quot;: null,\n    &quot;code&quot;: &quot;insufficient_quota&quot;\n  }\n}</p>\n<h4>Quellen</h4><ul>\n</ul>"
 }
