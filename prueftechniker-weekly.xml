@@ -2,7 +2,7 @@
 <rss version="2.0">
   <channel>
     <title>Prüftechniker Weekly Update</title>
-    <link>https://DEINNAME.github.io/DEIN-REPO/prueftechniker-weekly.xml</link>
+    <link>https://leistungslistte.github.io/Pr-Tleck/prueftechniker-weekly.xml</link>
     <description>Wöchentliches Update zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software für Prüftechniker.</description>
     <language>de-de</language>
     <lastBuildDate>Mon, 23 Mar 2026 08:00:00 GMT</lastBuildDate>
@@ -10,19 +10,17 @@
 
     <item>
       <title>Prüftechniker Weekly Update – KW 13/2026</title>
-      <link>https://DEINNAME.github.io/DEIN-REPO/</link>
+      <link>https://leistungslistte.github.io/Pr-Tleck/</link>
       <guid>prueftechniker-weekly-2026-kw13</guid>
       <pubDate>Mon, 23 Mar 2026 08:00:00 GMT</pubDate>
       <description><![CDATA[
-        <h3>Wochenschwerpunkte</h3>
-        <ul>
-          <li>Überblick zu relevanten Änderungen bei DGUV, TRBS und Normenumfeld</li>
-          <li>Praxisrelevante Hinweise für Prüftechniker</li>
-          <li>Neue Informationen zu Messgeräten und Software</li>
-        </ul>
-        <p>Diese XML-Datei wird von deinem Feed Hub automatisch eingelesen.</p>
+Wochenschwerpunkte:
+- Überblick zu relevanten Änderungen bei DGUV, TRBS und Normenumfeld
+- Praxisrelevante Hinweise für Prüftechniker
+- Neue Informationen zu Messgeräten und Software
+
+Diese XML-Datei wird von deinem Feed Hub automatisch eingelesen.
       ]]></description>
     </item>
-
   </channel>
 </rss>
