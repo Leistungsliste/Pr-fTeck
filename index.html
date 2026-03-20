@@ -18,7 +18,6 @@
       --green:#173a24;
       --green-border:#2ca45c;
       --blue:#5aa2ff;
-      --yellow:#ffcc66;
       --chip:#0f1a2f;
       --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:18px;
@@ -275,6 +274,7 @@
       display:flex;
       gap:8px;
       flex-wrap:wrap;
+      margin-top:10px;
     }
 
     .actions a{
@@ -311,17 +311,20 @@
 
     .weekly-html{
       margin-top:10px;
-      padding:12px;
+      padding:14px;
       border-radius:12px;
       background:#10192b;
       border:1px solid #31476e;
     }
 
-    .weekly-html h3, .weekly-html h4{
+    .weekly-html h3,
+    .weekly-html h4{
       margin:0 0 10px;
+      color:#fff;
     }
 
-    .weekly-html p, .weekly-html li{
+    .weekly-html p,
+    .weekly-html li{
       line-height:1.5;
       color:#eef3fb;
     }
@@ -526,7 +529,10 @@
       if (!dateString) return "";
       const d = new Date(dateString);
       if (isNaN(d.getTime())) return "";
-      return d.toLocaleDateString("de-DE") + ", " + d.toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"});
+      return d.toLocaleDateString("de-DE") + ", " + d.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
     function getManualEntries() {
@@ -555,12 +561,8 @@
 
     function levelChip(level = "Info") {
       const normalized = (level || "Info").toLowerCase();
-      if (normalized === "hoch") {
-        return `<span class="chip chip-high">Hoch</span>`;
-      }
-      if (normalized === "mittel") {
-        return `<span class="chip chip-medium">Mittel</span>`;
-      }
+      if (normalized === "hoch") return `<span class="chip chip-high">Hoch</span>`;
+      if (normalized === "mittel") return `<span class="chip chip-medium">Mittel</span>`;
       return `<span class="chip chip-info">Info</span>`;
     }
 
@@ -631,9 +633,7 @@
       }
 
       const items = Array.from(xml.querySelectorAll("item"));
-      if (!items.length) {
-        return [];
-      }
+      if (!items.length) return [];
 
       return items.map((item, index) => {
         const title = item.querySelector("title")?.textContent?.trim() || "Ohne Titel";
@@ -662,7 +662,7 @@
         const response = await fetch(metaUrl, { cache: "no-store" });
         if (!response.ok) throw new Error("weekly-data.json nicht erreichbar");
         weeklyMeta = await response.json();
-      } catch (e) {
+      } catch {
         weeklyMeta = null;
       }
       updateMetaUI();
@@ -681,9 +681,7 @@
 
       try {
         const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) {
-          throw new Error("Feed nicht erreichbar");
-        }
+        if (!response.ok) throw new Error("Feed nicht erreichbar");
 
         const text = await response.text();
         weeklyEntries = parseRssXml(text);
@@ -704,7 +702,7 @@
 
           weeklyEntries = [...weeklyEntries, ...sourceEntries];
         }
-      } catch (error) {
+      } catch {
         weeklyMeta = {
           mode: "Fehler",
           status: "Feed konnte nicht geladen werden",
@@ -751,9 +749,54 @@
         entry.category,
         entry.date,
         entry.level,
-        entry.practical_note || ""
+        entry.practical_note || "",
+        stripHtml(entry.rawHtml || "")
       ].join(" ").toLowerCase();
+
       return haystack.includes(term.toLowerCase());
+    }
+
+    function renderCard(entry) {
+      const isWeeklyMain = entry.source === "Weekly RSS" && entry.rawHtml;
+      const cardClass = entry.category === "weekly" ? "card weekly" : "card";
+
+      const chips = `
+        <div class="chips">
+          <span class="chip">${escapeHtml(entry.source || "Quelle")}</span>
+          <span class="chip">${escapeHtml(entry.category)}</span>
+          <span class="chip">${escapeHtml(entry.date || "ohne Datum")}</span>
+          ${levelChip(entry.level)}
+        </div>
+      `;
+
+      const actions = entry.link
+        ? `<div class="actions"><a href="${escapeHtml(entry.link)}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a></div>`
+        : "";
+
+      if (isWeeklyMain) {
+        return `
+          <article class="${cardClass}">
+            <h3>${escapeHtml(entry.title)}</h3>
+            ${chips}
+            <div class="weekly-html">${entry.rawHtml}</div>
+            ${actions}
+          </article>
+        `;
+      }
+
+      const practice = entry.practical_note
+        ? `<p class="desc"><strong>Praxis:</strong> ${escapeHtml(entry.practical_note)}</p>`
+        : "";
+
+      return `
+        <article class="${cardClass}">
+          <h3>${escapeHtml(entry.title)}</h3>
+          ${chips}
+          <p class="desc">${escapeHtml(entry.description || "")}</p>
+          ${practice}
+          ${actions}
+        </article>
+      `;
     }
 
     function render() {
@@ -771,39 +814,7 @@
         return;
       }
 
-      feedList.innerHTML = entries.map(entry => {
-        const isWeeklyMain = entry.source === "Weekly RSS";
-        const cardClass = entry.category === "weekly" ? "card weekly" : "card";
-        const linkButton = entry.link
-          ? `<a href="${escapeHtml(entry.link)}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a>`
-          : "";
-
-        const practice = entry.practical_note
-          ? `<p class="desc"><strong>Praxis:</strong> ${escapeHtml(entry.practical_note)}</p>`
-          : "";
-
-        const weeklyHtmlBlock = isWeeklyMain && entry.rawHtml
-          ? `<div class="weekly-html">${entry.rawHtml}</div>`
-          : "";
-
-        return `
-          <article class="${cardClass}">
-            <h3>${escapeHtml(entry.title)}</h3>
-            <div class="chips">
-              <span class="chip">${escapeHtml(entry.source || "Quelle")}</span>
-              <span class="chip">${escapeHtml(entry.category)}</span>
-              <span class="chip">${escapeHtml(entry.date || "ohne Datum")}</span>
-              ${levelChip(entry.level)}
-            </div>
-            <p class="desc">${escapeHtml(entry.description || "")}</p>
-            ${practice}
-            ${weeklyHtmlBlock}
-            <div class="actions">
-              ${linkButton}
-            </div>
-          </article>
-        `;
-      }).join("");
+      feedList.innerHTML = entries.map(renderCard).join("");
     }
 
     document.querySelectorAll(".filter-btn").forEach(btn => {
