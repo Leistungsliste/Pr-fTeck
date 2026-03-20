@@ -1,38 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Prüftechniker Weekly Update</title>
+    <title>Prüfdienstleister Weekly Update</title>
     <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
-    <description>Kostenlos automatisch erzeugtes Weekly zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
+    <description>Kostenlos automatisch erzeugtes Weekly zu Arbeitssicherheit, VDE-/Normenumfeld und relevanten Themen für Prüfdienstleister.</description>
     <language>de-de</language>
-    <lastBuildDate>Fri, 20 Mar 2026 12:24:29 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 12:37:58 +0000</lastBuildDate>
     <ttl>10080</ttl>
 
     <item>
-      <title>Prüftechniker Weekly – 20.03.2026</title>
+      <title>Prüfdienstleister Weekly – 20.03.2026</title>
       <link>https://leistungsliste.github.io/Pr-tleck/</link>
-      <guid>prueftechniker-weekly-2026-03-20-122429</guid>
-      <pubDate>Fri, 20 Mar 2026 12:24:29 +0000</pubDate>
+      <guid>pruefdienstleister-weekly-2026-03-20-123758</guid>
+      <pubDate>Fri, 20 Mar 2026 12:37:58 +0000</pubDate>
       <description><![CDATA[
-<h3>Prüftechniker Weekly</h3>
-<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlichen Quellen erzeugt. Die Einträge sind nach vermuteter Relevanz für Prüftechniker vorsortiert. Stand: 20.03.2026 12:24 UTC.</p>
-<h4>Offizielle Quellen / Normen / Regeln</h4>
-<p>Diese Woche keine normenbezogenen Einträge gefunden.</p>
-<h4>Messgeräte / Hersteller</h4>
-<p>Diese Woche keine gerätebezogenen Einträge gefunden.</p>
-<h4>Praxisrelevanz</h4>
+<h3>Prüfdienstleister Weekly</h3>
+<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlich erreichbaren Quellen erzeugt. Es ist auf Arbeitssicherheit, Normenumfeld und Praxisrelevanz für Prüfdienstleister ausgerichtet. Stand: 20.03.2026 12:37 UTC.</p>
+<h4>Arbeitssicherheit / Arbeitsschutz / Regelwerk</h4>
 <ul>
-<li><b>Diverse Attacken auf Dell Secure Connect Gateway Policy Manager möglich</b> (<i>Mittel</i>, Heise News)<br>Mehrere Sicherheitslücken gefährden Systeme mit Dell Secure Connect Gateway Policy Manager. Eine reparierte Version steht zum Download bereit.<br><small>Praxis: Auf praktische Auswirkungen für sichere Prüfabläufe und Dokumentation prüfen.</small></li>
-<li><b>Lücke bei Campusnet: Datenpanne betrifft mehr als eine Million Studenten</b> (<i>Mittel</i>, Golem News)<br>Der CCC hat eine Sicherheitslücke aufgedeckt: Angreifer hätten persönliche Daten der Studenten von über 20 deutschen Hochschulen abgreifen können. ( Datenleck , Datenschutz )<br><small>Praxis: Auf praktische Auswirkungen für sichere Prüfabläufe und Dokumentation prüfen.</small></li>
-<li>Prüffristen und Prüfumfang sollten immer nachvollziehbar aus Gefährdungsbeurteilung, Einsatzbedingungen und Erfahrung abgeleitet werden.</li>
-<li>Bei Normen- oder Softwareänderungen ist entscheidend, ob sich daraus konkrete Änderungen für Prüfabläufe, Dokumentation oder Grenzwerte ergeben.</li>
-<li>Hersteller- und Technikbeiträge sind für Gerätefunktionen hilfreich, sollten aber fachlich von offiziellen Quellen getrennt betrachtet werden.</li>
-<li>Höchste automatische Relevanz diese Woche: <b>Diverse Attacken auf Dell Secure Connect Gateway Policy Manager möglich</b> (Heise News, Einstufung: Mittel).</li>
+<li><b>Betriebe gesucht: Feldstudie zu Klimawandel und Arbeitsschutz</b> (<i>Kritisch</i>, BAuA Presse)<br>Dortmund - Der Klimawandel verändert zunehmend die Arbeitsbedingungen. Höhere Temperaturen und damit mehr Hitzestress sowie zunehmende UV-Strahlung erhöhen die gesundheitlichen Risiken für Beschäftigte, die im Freien arbeiten. Auch Tätigkeiten, die b …<br><small>Praxis: Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen.</small></li>
+<li><b>2. KI-Werkstatt: Forschung - Praxis - Arbeitswelt</b> (<i>Kritisch</i>, BAuA Presse)<br>Dortmund - Nach der erfolgreichen Premiere im Jahr 2024 lädt die Bundesanstalt für Arbeitsschutz und Arbeitsmedizin (BAuA) am 17. März 2026 gemeinsam mit der Technischen Universität Dortmund, dem Lamarr-Institut und dem Research Center Trustworthy Da …<br><small>Praxis: Amtliche Einordnung aus dem Arbeitsschutz- und Regelwerksumfeld.</small></li>
+<li><b>&quot;Vereint durch Einzigartigkeit&quot;</b> (<i>Kritisch</i>, BAuA Presse)<br>Dortmund - Am 04. Februar, dem Weltkrebstag, erinnert das Aktionsbündnis &quot;Roadmap on Carcinogens&quot;, unter der Federführung des Bundesministeriums für Arbeit und Soziales und mit Unterstützung der Bundesanstalt für Arbeitsschutz und Arbeitsmedizin, Unt …<br><small>Praxis: Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen.</small></li>
+<li><b>Scheitern als Chance für mehr Sicherheit</b> (<i>Kritisch</i>, BG ETEM Pressemeldungen)<br>(09.12.2025) Ein konstruktiver Umgang mit Fehlern ist entscheidend für sichere Arbeitsbedingungen. Die BG ETEM erläutert, wie Unternehmen eine positive Fehlerkultur etablieren können.<br><small>Praxis: Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen.</small></li>
+<li><b>Arbeiten von zu Hause bleibt fester Bestandteil der Arbeitswelt</b> (<i>Hoch</i>, BAuA Presse)<br>Dortmund - Das Arbeiten von zu Hause hat sich weiter etabliert. Dies zeigen Auswertungen der BAuA-Arbeitszeitbefragung 2023. Demnach arbeiten rund 50 Prozent der Beschäftigten von zu Hause. Zudem haben betriebliche Vereinbarungen sowie die Erfassung …<br><small>Praxis: Amtliche Einordnung aus dem Arbeitsschutz- und Regelwerksumfeld.</small></li>
+<li><b>Superkraft für Unternehmen: von Stuntleuten lernen</b> (<i>Hoch</i>, BG ETEM Aktuelle Meldungen)<br>(19.03.2026) Wie Stuntteams Risiken managen, kann Unternehmen wertvolle Impulse für Arbeitsschutz und Risikokompetenz geben. Die Berufsgenossenschaft Energie Textil Elektro Medienerzeugnisse (BG ETEM) erklärt, wie sich Prinzipien aus der Filmwelt auf den Arbeitsalltag übertragen lassen.<br><small>Praxis: Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen.</small></li>
+</ul>
+<h4>VDE / Normenumfeld / technische Sicherheit</h4>
+<ul>
+<li><b>VDE Verlag – Normen / Standards</b> (<i>Hoch</i>, VDE Verlag)<br>Zentrale Referenz für VDE-Normen und Standards; offene RSS-Abdeckung für Normen selbst ist begrenzt.<br><small>Praxis: Für Prüfdienstleister wichtig zur gezielten Beobachtung relevanter Normen wie EN 50678 / EN 50699 und verwandter Standards.</small></li>
+</ul>
+<h4>Messgeräte / Prüfsoftware / Produktthemen</h4>
+<p>Diese Woche keine relevanten geräte- oder softwarebezogenen Einträge gefunden.</p>
+<h4>Praxisrelevanz für Prüfdienstleister</h4>
+<ul>
+<li>Für Prüfdienstleister sind Änderungen bei Arbeitsschutz, BetrSichV/TRBS, DGUV-Umfeld und Normen besonders relevant, wenn sie Prüforganisation, Prüftiefe, Fristen oder Dokumentation beeinflussen.</li>
+<li>Beim Normenumfeld sollte immer geprüft werden, ob sich die Änderung direkt auf Arbeitsanweisungen, Messabläufe oder Protokolle auswirkt.</li>
+<li>VDE-/Normenquellen sind fachlich besonders wichtig, auch wenn es dafür nicht immer einen einfachen offenen News-RSS wie bei klassischen Medien gibt.</li>
+<li>Hersteller- und Technikbeiträge sind nützlich, sollten aber für einen Prüfdienstleister immer von amtlichen und regelwerksnahen Quellen getrennt bewertet werden.</li>
+<li>Höchste automatische Relevanz diese Woche: <b>Betriebe gesucht: Feldstudie zu Klimawandel und Arbeitsschutz</b> (BAuA Presse, Einstufung: Kritisch).</li>
 </ul>
 <h4>Quellen</h4>
 <ul>
-<li><a href="https://www.heise.de/news/Diverse-Attacken-auf-Dell-Secure-Connect-Gateway-Policy-Manager-moeglich-11219110.html?wt_mc=rss.red.ho.ho.rdf.beitrag.beitrag">Diverse Attacken auf Dell Secure Connect Gateway Policy Manager möglich</a> – Heise News (praxis)</li>
-<li><a href="https://www.golem.de/news/luecke-bei-campusnet-datenpanne-betrifft-mehr-als-eine-million-studenten-2603-206738.html">Lücke bei Campusnet: Datenpanne betrifft mehr als eine Million Studenten</a> – Golem News (praxis)</li>
+<li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm07-26">Betriebe gesucht: Feldstudie zu Klimawandel und Arbeitsschutz</a> – BAuA Presse (arbeitssicherheit)</li>
+<li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm05-26">2. KI-Werkstatt: Forschung - Praxis - Arbeitswelt</a> – BAuA Presse (arbeitssicherheit)</li>
+<li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm04-26">&quot;Vereint durch Einzigartigkeit&quot;</a> – BAuA Presse (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2025/scheitern-als-chance-fuer-mehr-sicherheit">Scheitern als Chance für mehr Sicherheit</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
+<li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm06-26">Arbeiten von zu Hause bleibt fester Bestandteil der Arbeitswelt</a> – BAuA Presse (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/superkraft-fuer-unternehmen-von-stuntleu-ten-lernen">Superkraft für Unternehmen: von Stuntleuten lernen</a> – BG ETEM Aktuelle Meldungen (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/kommunikation-ist-entscheidend-fuer-ihre-wirksamkeit">Kommunikation ist entscheidend für ihre Wirksamkeit</a> – BG ETEM Aktuelle Meldungen (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/aenderungen-im-regelwerk">Änderungen im Regelwerk</a> – BG ETEM Aktuelle Meldungen (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/superkraft-fuer-unternehmen-von-stuntleu-ten-lernen">Superkraft für Unternehmen: von Stuntleuten lernen</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/motivation-als-schluessel-fuer-wirksamen-arbeitsschutz">Motivation als Schlüssel für wirksamen Arbeitsschutz</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
+<li><a href="https://www.vde-verlag.de/">VDE Verlag – Normen / Standards</a> – VDE Verlag (vde_normen)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/kommunikation-ist-entscheidend-fuer-ihre-wirksamkeit">Kommunikation ist entscheidend für ihre Wirksamkeit</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
+<li><a href="https://www.baua.de/DE/Angebote/Aktuelles">BAuA – Aktuelles</a> – BAuA (arbeitssicherheit)</li>
+<li><a href="https://www.dguv.de/de/sonstiges/rss-feed-so-gehts/index.jsp">DGUV – RSS-Feeds abonnieren</a> – DGUV (arbeitssicherheit)</li>
 </ul>
       ]]></description>
     </item>
