@@ -2,6 +2,7 @@ import json
 import os
 import re
 import html
+import sys
 from pathlib import Path
 from datetime import datetime, timezone
 from email.utils import format_datetime
@@ -15,7 +16,7 @@ REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
 OPENAI_API_URL = "https://api.openai.com/v1/responses"
-OPENAI_MODEL = "gpt-5.4"
+OPENAI_MODEL = "gpt-4.1-mini"
 
 SOURCES = [
     {
@@ -127,8 +128,11 @@ def collect_items() -> list:
     collected = []
     for source in SOURCES:
         try:
-            collected.extend(parse_feed(source))
+            source_items = parse_feed(source)
+            print(f"[INFO] {source['name']}: {len(source_items)} Einträge gesammelt")
+            collected.extend(source_items)
         except Exception as exc:
+            print(f"[WARN] Feed-Laden fehlgeschlagen: {source['name']} -> {exc}")
             collected.append({
                 "source": source["name"],
                 "category": source["category"],
@@ -152,30 +156,14 @@ def build_ai_prompt(items: list) -> str:
     lines.append(
         "Wichtig: Keine erfundenen Fakten. Wenn etwas unklar ist, als Hinweis oder Tendenz formulieren."
     )
-    lines.append(
-        "Struktur in HTML:"
-    )
-    lines.append(
-        "1. <h3>Prüftechniker Weekly</h3>"
-    )
-    lines.append(
-        "2. Kurze Einleitung als <p>"
-    )
-    lines.append(
-        "3. <h4>Offizielle Quellen / Normen / Regeln</h4> mit <ul><li>...</li></ul>"
-    )
-    lines.append(
-        "4. <h4>Messgeräte / Hersteller</h4> mit <ul><li>...</li></ul>"
-    )
-    lines.append(
-        "5. <h4>Praxisrelevanz</h4> mit <ul><li>...</li></ul>"
-    )
-    lines.append(
-        "6. <h4>Quellen</h4> mit <ul><li><a href='...'>Titel</a> – Quelle</li></ul>"
-    )
-    lines.append(
-        "Bitte nur kompaktes HTML ohne Markdown."
-    )
+    lines.append("Struktur in HTML:")
+    lines.append("1. <h3>Prüftechniker Weekly</h3>")
+    lines.append("2. Kurze Einleitung als <p>")
+    lines.append("3. <h4>Offizielle Quellen / Normen / Regeln</h4> mit <ul><li>...</li></ul>")
+    lines.append("4. <h4>Messgeräte / Hersteller</h4> mit <ul><li>...</li></ul>")
+    lines.append("5. <h4>Praxisrelevanz</h4> mit <ul><li>...</li></ul>")
+    lines.append("6. <h4>Quellen</h4> mit <ul><li><a href='...'>Titel</a> – Quelle</li></ul>")
+    lines.append("Bitte nur kompaktes HTML ohne Markdown.")
     lines.append("")
     lines.append("Hier sind die gesammelten Quellen:")
     lines.append("")
@@ -197,7 +185,7 @@ def build_ai_prompt(items: list) -> str:
 def call_openai(prompt: str) -> str:
     api_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if not api_key:
-        raise RuntimeError("OPENAI_API_KEY fehlt.")
+        raise RuntimeError("OPENAI_API_KEY fehlt oder ist leer.")
 
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -230,18 +218,22 @@ def call_openai(prompt: str) -> str:
                 ],
             },
         ],
-        "text": {
-            "verbosity": "medium"
-        }
     }
 
+    print("[INFO] Sende Anfrage an OpenAI API ...")
     response = requests.post(
         OPENAI_API_URL,
         headers=headers,
         json=payload,
         timeout=120,
     )
-    response.raise_for_status()
+
+    print(f"[INFO] OpenAI HTTP-Status: {response.status_code}")
+
+    if not response.ok:
+        body_preview = response.text[:1500]
+        raise RuntimeError(f"OpenAI API Fehler {response.status_code}: {body_preview}")
+
     data = response.json()
 
     output_text = ""
@@ -254,11 +246,17 @@ def call_openai(prompt: str) -> str:
     output_text = output_text.strip()
     if not output_text:
         raise RuntimeError("Keine Textausgabe von der OpenAI API erhalten.")
+
+    print("[INFO] KI-Zusammenfassung erfolgreich erzeugt.")
     return output_text
 
 
-def build_fallback_html(items: list) -> str:
-    blocks = [STATIC_FALLBACK_SUMMARY, "<h4>Quellen</h4><ul>"]
+def build_fallback_html(items: list, reason: str) -> str:
+    blocks = [
+        STATIC_FALLBACK_SUMMARY,
+        f"<p><b>Fehler:</b> {safe_text(reason)}</p>",
+        "<h4>Quellen</h4><ul>"
+    ]
     for item in items:
         title = safe_text(item["title"])
         source = safe_text(item["source"])
@@ -270,7 +268,7 @@ def build_fallback_html(items: list) -> str:
 
 def build_xml(html_description: str, generated: datetime) -> str:
     pub_date = format_datetime(generated)
-    guid = f"prueftechniker-weekly-{generated.strftime('%Y-%m-%d')}"
+    guid = f"prueftechniker-weekly-{generated.strftime('%Y-%m-%d-%H%M%S')}"
     title = f"Prüftechniker Weekly – {generated.strftime('%d.%m.%Y')}"
 
     return f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -302,12 +300,16 @@ def main():
     items = collect_items()
     prompt = build_ai_prompt(items)
 
+    status = "ok"
+    error_message = ""
+
     try:
-      ai_html = call_openai(prompt)
-      status = "ok"
+        ai_html = call_openai(prompt)
     except Exception as exc:
-      ai_html = build_fallback_html(items)
-      status = f"fallback: {exc}"
+        error_message = str(exc)
+        print(f"[ERROR] KI-Zusammenfassung fehlgeschlagen: {error_message}", file=sys.stderr)
+        ai_html = build_fallback_html(items, error_message)
+        status = f"fallback: {error_message}"
 
     xml = build_xml(ai_html, generated)
 
@@ -317,6 +319,7 @@ def main():
             {
                 "generated_at": generated.isoformat(),
                 "status": status,
+                "error": error_message,
                 "model": OPENAI_MODEL,
                 "items": items,
                 "html_preview": ai_html,
@@ -326,6 +329,9 @@ def main():
         ),
         encoding="utf-8",
     )
+
+    print(f"[INFO] weekly-data.json geschrieben, Status: {status}")
+    print("[INFO] prueftechniker-weekly.xml aktualisiert")
 
 
 if __name__ == "__main__":
