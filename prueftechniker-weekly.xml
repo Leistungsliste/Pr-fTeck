@@ -3,19 +3,19 @@
   <channel>
     <title>Prüfdienstleister Weekly Update</title>
     <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
-    <description>Kostenlos automatisch erzeugtes Weekly zu Arbeitssicherheit, VDE-/Normenumfeld und relevanten Themen für Prüfdienstleister.</description>
+    <description>Kostenlos automatisch erzeugtes Weekly zu Arbeitssicherheit, VDE-/Normenumfeld, VDE-Newslettern und relevanten Themen für Prüfdienstleister.</description>
     <language>de-de</language>
-    <lastBuildDate>Fri, 20 Mar 2026 12:37:58 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 12:55:48 +0000</lastBuildDate>
     <ttl>10080</ttl>
 
     <item>
       <title>Prüfdienstleister Weekly – 20.03.2026</title>
       <link>https://leistungsliste.github.io/Pr-tleck/</link>
-      <guid>pruefdienstleister-weekly-2026-03-20-123758</guid>
-      <pubDate>Fri, 20 Mar 2026 12:37:58 +0000</pubDate>
+      <guid>pruefdienstleister-weekly-2026-03-20-125548</guid>
+      <pubDate>Fri, 20 Mar 2026 12:55:48 +0000</pubDate>
       <description><![CDATA[
 <h3>Prüfdienstleister Weekly</h3>
-<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlich erreichbaren Quellen erzeugt. Es ist auf Arbeitssicherheit, Normenumfeld und Praxisrelevanz für Prüfdienstleister ausgerichtet. Stand: 20.03.2026 12:37 UTC.</p>
+<p>Dieses Weekly wurde automatisch und kostenlos aus öffentlich erreichbaren Quellen erzeugt. Es ist auf Arbeitssicherheit, VDE-/Normenumfeld, VDE-Newsletter-Hinweise und Praxisrelevanz für Prüfdienstleister ausgerichtet. Stand: 20.03.2026 12:55 UTC.</p>
 <h4>Arbeitssicherheit / Arbeitsschutz / Regelwerk</h4>
 <ul>
 <li><b>Betriebe gesucht: Feldstudie zu Klimawandel und Arbeitsschutz</b> (<i>Kritisch</i>, BAuA Presse)<br>Dortmund - Der Klimawandel verändert zunehmend die Arbeitsbedingungen. Höhere Temperaturen und damit mehr Hitzestress sowie zunehmende UV-Strahlung erhöhen die gesundheitlichen Risiken für Beschäftigte, die im Freien arbeiten. Auch Tätigkeiten, die b …<br><small>Praxis: Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen.</small></li>
@@ -27,16 +27,22 @@
 </ul>
 <h4>VDE / Normenumfeld / technische Sicherheit</h4>
 <ul>
-<li><b>VDE Verlag – Normen / Standards</b> (<i>Hoch</i>, VDE Verlag)<br>Zentrale Referenz für VDE-Normen und Standards; offene RSS-Abdeckung für Normen selbst ist begrenzt.<br><small>Praxis: Für Prüfdienstleister wichtig zur gezielten Beobachtung relevanter Normen wie EN 50678 / EN 50699 und verwandter Standards.</small></li>
+<li><b>VDE Verlag – Normen / Standards</b> (<i>Kritisch</i>, VDE Verlag)<br>Zentrale Referenz für VDE-Normen und Standards.<br><small>Praxis: Für Prüfdienstleister zentrale Referenz, um relevante Normen wie EN 50678, EN 50699 und angrenzende Standards gezielt zu beobachten.</small></li>
+</ul>
+<h4>VDE Newsletter / beobachtete VDE-Quellen</h4>
+<ul>
+<li><b>VDE Newsletter – Übersicht</b> (<i>Hoch</i>, VDE)<br>Zentrale Übersicht der VDE-Newsletter, u. a. zu Technik, Normenumfeld und Verbandsinformationen.<br><small>Praxis: Als zentrale VDE-Einstiegsquelle gut geeignet, um relevante Newsletter-Bereiche für Prüfdienstleister im Blick zu behalten.</small></li>
+<li><b>VDE FNN Newsletter</b> (<i>Hoch</i>, VDE FNN)<br>Newsletter zu Netztechnik, Netzbetrieb und energietechnischen Praxisthemen.<br><small>Praxis: Relevant, wenn Prüfleistungen energietechnische Anlagen, Netzanschluss, Schutztechnik oder Betriebsmittel im Netzumfeld betreffen.</small></li>
+<li><b>VDE ABB Blitzschutz-Newsletter</b> (<i>Hoch</i>, VDE ABB)<br>Newsletter zu Blitzschutz und Überspannungsschutz.<br><small>Praxis: Für Prüfdienstleister mit Bezug zu Blitzschutz, Überspannungsschutz oder Anlagenprüfung praktisch relevant.</small></li>
 </ul>
 <h4>Messgeräte / Prüfsoftware / Produktthemen</h4>
 <p>Diese Woche keine relevanten geräte- oder softwarebezogenen Einträge gefunden.</p>
 <h4>Praxisrelevanz für Prüfdienstleister</h4>
 <ul>
-<li>Für Prüfdienstleister sind Änderungen bei Arbeitsschutz, BetrSichV/TRBS, DGUV-Umfeld und Normen besonders relevant, wenn sie Prüforganisation, Prüftiefe, Fristen oder Dokumentation beeinflussen.</li>
-<li>Beim Normenumfeld sollte immer geprüft werden, ob sich die Änderung direkt auf Arbeitsanweisungen, Messabläufe oder Protokolle auswirkt.</li>
-<li>VDE-/Normenquellen sind fachlich besonders wichtig, auch wenn es dafür nicht immer einen einfachen offenen News-RSS wie bei klassischen Medien gibt.</li>
-<li>Hersteller- und Technikbeiträge sind nützlich, sollten aber für einen Prüfdienstleister immer von amtlichen und regelwerksnahen Quellen getrennt bewertet werden.</li>
+<li>Für Prüfdienstleister sind Änderungen bei Arbeitsschutz, DGUV-/BG-Umfeld, VDE-/Normenumfeld und technischer Sicherheit besonders relevant, wenn sie Prüforganisation, Prüftiefe, Fristen oder Dokumentation beeinflussen.</li>
+<li>Beim VDE-/Normenumfeld sollte immer geprüft werden, ob sich Änderungen direkt auf Arbeitsanweisungen, Messabläufe, Formulare oder Kundenberichte auswirken.</li>
+<li>VDE-Newsletter sind wertvolle Hinweisquellen, ersetzen aber keine gezielte Beobachtung der konkret für euch relevanten Normen und Standardseiten.</li>
+<li>Amtliche und regelwerksnahe Quellen sollten für Entscheidungen immer höher gewichtet werden als allgemeine Technik- oder Produktinformationen.</li>
 <li>Höchste automatische Relevanz diese Woche: <b>Betriebe gesucht: Feldstudie zu Klimawandel und Arbeitsschutz</b> (BAuA Presse, Einstufung: Kritisch).</li>
 </ul>
 <h4>Quellen</h4>
@@ -45,16 +51,18 @@
 <li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm05-26">2. KI-Werkstatt: Forschung - Praxis - Arbeitswelt</a> – BAuA Presse (arbeitssicherheit)</li>
 <li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm04-26">&quot;Vereint durch Einzigartigkeit&quot;</a> – BAuA Presse (arbeitssicherheit)</li>
 <li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2025/scheitern-als-chance-fuer-mehr-sicherheit">Scheitern als Chance für mehr Sicherheit</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
+<li><a href="https://www.vde-verlag.de/">VDE Verlag – Normen / Standards</a> – VDE Verlag (vde_normen)</li>
 <li><a href="https://www.baua.de/DE/Services/Presse/Pressemitteilungen/2026/02/pm06-26">Arbeiten von zu Hause bleibt fester Bestandteil der Arbeitswelt</a> – BAuA Presse (arbeitssicherheit)</li>
 <li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/superkraft-fuer-unternehmen-von-stuntleu-ten-lernen">Superkraft für Unternehmen: von Stuntleuten lernen</a> – BG ETEM Aktuelle Meldungen (arbeitssicherheit)</li>
+<li><a href="https://www.vde.com/newsletter">VDE Newsletter – Übersicht</a> – VDE (vde_newsletter)</li>
+<li><a href="https://www.vde.com/fnn-newsletter">VDE FNN Newsletter</a> – VDE FNN (vde_newsletter)</li>
 <li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/kommunikation-ist-entscheidend-fuer-ihre-wirksamkeit">Kommunikation ist entscheidend für ihre Wirksamkeit</a> – BG ETEM Aktuelle Meldungen (arbeitssicherheit)</li>
 <li><a href="https://www.bgetem.de/presse-aktuelles/aenderungen-im-regelwerk">Änderungen im Regelwerk</a> – BG ETEM Aktuelle Meldungen (arbeitssicherheit)</li>
 <li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/superkraft-fuer-unternehmen-von-stuntleu-ten-lernen">Superkraft für Unternehmen: von Stuntleuten lernen</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
 <li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/motivation-als-schluessel-fuer-wirksamen-arbeitsschutz">Motivation als Schlüssel für wirksamen Arbeitsschutz</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
-<li><a href="https://www.vde-verlag.de/">VDE Verlag – Normen / Standards</a> – VDE Verlag (vde_normen)</li>
-<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/kommunikation-ist-entscheidend-fuer-ihre-wirksamkeit">Kommunikation ist entscheidend für ihre Wirksamkeit</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
-<li><a href="https://www.baua.de/DE/Angebote/Aktuelles">BAuA – Aktuelles</a> – BAuA (arbeitssicherheit)</li>
+<li><a href="https://www.vde.com/blitzschutz-newsletter">VDE ABB Blitzschutz-Newsletter</a> – VDE ABB (vde_newsletter)</li>
 <li><a href="https://www.dguv.de/de/sonstiges/rss-feed-so-gehts/index.jsp">DGUV – RSS-Feeds abonnieren</a> – DGUV (arbeitssicherheit)</li>
+<li><a href="https://www.bgetem.de/presse-aktuelles/pressemeldungen/2026/kommunikation-ist-entscheidend-fuer-ihre-wirksamkeit">Kommunikation ist entscheidend für ihre Wirksamkeit</a> – BG ETEM Pressemeldungen (arbeitssicherheit)</li>
 </ul>
       ]]></description>
     </item>
