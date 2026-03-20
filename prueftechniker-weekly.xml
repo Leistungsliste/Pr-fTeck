@@ -2,25 +2,44 @@
 <rss version="2.0">
   <channel>
     <title>Prüftechniker Weekly Update</title>
-    <link>https://leistungslistte.github.io/Pr-Tleck/prueftechniker-weekly.xml</link>
-    <description>Wöchentliches Update zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software für Prüftechniker.</description>
+    <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
+    <description>Wöchentliches Update zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
     <language>de-de</language>
     <lastBuildDate>Mon, 23 Mar 2026 08:00:00 GMT</lastBuildDate>
-    <ttl>10080</ttl>
 
     <item>
-      <title>Prüftechniker Weekly Update – KW 13/2026</title>
-      <link>https://leistungslistte.github.io/Pr-Tleck/</link>
-      <guid>prueftechniker-weekly-2026-kw13</guid>
+      <title>Prüftechniker Weekly – Testausgabe</title>
+      <link>https://leistungsliste.github.io/Pr-tleck/</link>
+      <guid>weekly-test-2026-03</guid>
       <pubDate>Mon, 23 Mar 2026 08:00:00 GMT</pubDate>
       <description><![CDATA[
-Wochenschwerpunkte:
-- Überblick zu relevanten Änderungen bei DGUV, TRBS und Normenumfeld
-- Praxisrelevante Hinweise für Prüftechniker
-- Neue Informationen zu Messgeräten und Software
+<h3>🔧 Test Weekly – Prüftechniker</h3>
 
-Diese XML-Datei wird von deinem Feed Hub automatisch eingelesen.
+<b>Normen & Vorschriften</b><br>
+DGUV Vorschrift 3 bleibt zentrale Grundlage für elektrische Prüfungen.<br>
+→ Fokus: sichere Betriebsmittel + Dokumentation<br><br>
+
+TRBS 1201:<br>
+→ Prüfumfang aus Gefährdungsbeurteilung ableiten<br><br>
+
+VDE Umstellung:<br>
+→ DIN VDE 0701/0702 ersetzt durch EN 50678 / 50699<br><br>
+
+<b>Messgeräte & Software</b><br>
+SECUTEST Geräte mit neuen Prüfsequenzen<br>
+→ automatisierte Abläufe, weniger Fehler<br><br>
+
+IZYTRONIQ:<br>
+→ bessere Dokumentation & Auditfähigkeit<br><br>
+
+<b>Praxis-Tipp</b><br>
+Nicht nur messen – immer begründen:<br>
+→ Warum wurde genau so geprüft?<br>
+→ Wie wurde die Prüffrist festgelegt?<br>
+
+Das wird immer wichtiger für Haftung & Audits.
       ]]></description>
     </item>
+
   </channel>
 </rss>
