@@ -14,9 +14,9 @@ REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
 
-USER_AGENT = "Mozilla/5.0 (compatible; PruefdienstleisterWeeklyBot/4.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; PruefdienstleisterWeeklyBot/5.0)"
 
-# Öffentliche Feeds / RSS-nahe Quellen
+# Echte Feed-/RSS-nahe Quellen
 SOURCES = [
     {
         "name": "BAuA Presse",
@@ -30,7 +30,7 @@ SOURCES = [
         "name": "BG ETEM Aktuelle Meldungen",
         "feed_url": "https://www.bgetem.de/startseite-der-bg-etem/aktuelle-meldungen/RSS",
         "category": "arbeitssicherheit",
-        "fallback_url": "https://www.bgetem.de/",
+        "fallback_url": "https://www.bgetem.de/startseite-der-bg-etem/aktuelle-meldungen",
         "max_items": 5,
         "priority": 2,
     },
@@ -38,12 +38,12 @@ SOURCES = [
         "name": "BG ETEM Pressemeldungen",
         "feed_url": "https://www.bgetem.de/presse-aktuelles/pressemeldungen/aktuelle-pressemeldungen/RSS",
         "category": "arbeitssicherheit",
-        "fallback_url": "https://www.bgetem.de/",
+        "fallback_url": "https://www.bgetem.de/presse-aktuelles/pressemeldungen",
         "max_items": 5,
         "priority": 3,
     },
     {
-        "name": "CERT@VDE News",
+        "name": "CERT@VDE News Feeds",
         "feed_url": "https://cert.vde.com/en/service/rss-feeds/",
         "category": "vde_normen",
         "fallback_url": "https://cert.vde.com/en/service/rss-feeds/",
@@ -52,51 +52,95 @@ SOURCES = [
     },
 ]
 
-# Statische Referenzen ohne RSS, aber fachlich wichtig
+# Wichtige VDE-/Prüfdienstleister-Quellen ohne einfachen offenen RSS-Feed
 STATIC_REFERENCES = [
     {
-        "title": "BAuA – Aktuelles",
-        "source": "BAuA",
-        "category": "arbeitssicherheit",
-        "link": "https://www.baua.de/DE/Angebote/Aktuelles",
-        "summary": "Amtliche Arbeitsschutz- und Regelwerksinformationen aus dem BAuA-Umfeld.",
+        "title": "VDE Newsletter – Übersicht",
+        "source": "VDE",
+        "category": "vde_newsletter",
+        "link": "https://www.vde.com/newsletter",
+        "summary": "Zentrale Übersicht der VDE-Newsletter, u. a. zu Technik, Normenumfeld und Verbandsinformationen.",
         "published": "",
-        "score": 8,
+        "score": 10,
         "level": "Hoch",
-        "practical_note": "Regelwerks- und Arbeitsschutzänderungen auf Auswirkungen für Prüforganisation, Dokumentation und Fristen prüfen.",
+        "practical_note": "Als zentrale VDE-Einstiegsquelle gut geeignet, um relevante Newsletter-Bereiche für Prüfdienstleister im Blick zu behalten.",
     },
     {
-        "title": "DGUV – RSS-Feeds abonnieren",
-        "source": "DGUV",
-        "category": "arbeitssicherheit",
-        "link": "https://www.dguv.de/de/sonstiges/rss-feed-so-gehts/index.jsp",
-        "summary": "Zentrale Einstiegsseite der DGUV für RSS-Feeds und aktuelle DGUV-Informationsangebote.",
+        "title": "VDE FNN Newsletter",
+        "source": "VDE FNN",
+        "category": "vde_newsletter",
+        "link": "https://www.vde.com/fnn-newsletter",
+        "summary": "Newsletter zu Netztechnik, Netzbetrieb und energietechnischen Praxisthemen.",
+        "published": "",
+        "score": 10,
+        "level": "Hoch",
+        "practical_note": "Relevant, wenn Prüfleistungen energietechnische Anlagen, Netzanschluss, Schutztechnik oder Betriebsmittel im Netzumfeld betreffen.",
+    },
+    {
+        "title": "VDE ETG Newsletter",
+        "source": "VDE ETG",
+        "category": "vde_newsletter",
+        "link": "https://www.vde.com/etg-newsletter",
+        "summary": "Newsletter zu energietechnischen Entwicklungen, Veranstaltungen und Fachthemen.",
         "published": "",
         "score": 8,
+        "level": "Mittel",
+        "practical_note": "Nützlich für technologische Entwicklungen im energietechnischen Umfeld, die mittelbar für Prüfdienstleistungen relevant sein können.",
+    },
+    {
+        "title": "VDE dialog Newsletter",
+        "source": "VDE dialog",
+        "category": "vde_newsletter",
+        "link": "https://www.vde.com/vde-dialog/vde-dialog-newsletter",
+        "summary": "Newsletter zu Technologie- und Verbandsthemen im VDE-Umfeld.",
+        "published": "",
+        "score": 7,
+        "level": "Mittel",
+        "practical_note": "Hilfreich für übergeordnete Technik- und Entwicklungsthemen; eher Hintergrund- als Detailquelle.",
+    },
+    {
+        "title": "VDE ABB Blitzschutz-Newsletter",
+        "source": "VDE ABB",
+        "category": "vde_newsletter",
+        "link": "https://www.vde.com/blitzschutz-newsletter",
+        "summary": "Newsletter zu Blitzschutz und Überspannungsschutz.",
+        "published": "",
+        "score": 9,
         "level": "Hoch",
-        "practical_note": "Relevant für Prävention, DGUV-Umfeld und Veröffentlichungen mit betrieblicher Wirkung.",
+        "practical_note": "Für Prüfdienstleister mit Bezug zu Blitzschutz, Überspannungsschutz oder Anlagenprüfung praktisch relevant.",
+    },
+    {
+        "title": "VDE News",
+        "source": "VDE",
+        "category": "vde_normen",
+        "link": "https://www.vde.com/topics-de/vde-themenseite/news",
+        "summary": "Aktuelle VDE-News als ergänzende Quelle für technische Themen und Entwicklungen.",
+        "published": "",
+        "score": 8,
+        "level": "Mittel",
+        "practical_note": "Gut als ergänzende Quelle für technische Entwicklungen im VDE-Umfeld; auf direkten Prüfbezug prüfen.",
     },
     {
         "title": "VDE Verlag – Normen / Standards",
         "source": "VDE Verlag",
         "category": "vde_normen",
         "link": "https://www.vde-verlag.de/",
-        "summary": "Zentrale Referenz für VDE-Normen und Standards; offene RSS-Abdeckung für Normen selbst ist begrenzt.",
+        "summary": "Zentrale Referenz für VDE-Normen und Standards.",
+        "published": "",
+        "score": 11,
+        "level": "Kritisch",
+        "practical_note": "Für Prüfdienstleister zentrale Referenz, um relevante Normen wie EN 50678, EN 50699 und angrenzende Standards gezielt zu beobachten.",
+    },
+    {
+        "title": "DGUV – RSS-Feeds abonnieren",
+        "source": "DGUV",
+        "category": "arbeitssicherheit",
+        "link": "https://www.dguv.de/de/sonstiges/rss-feed-so-gehts/index.jsp",
+        "summary": "Zentrale DGUV-Seite zu RSS-Feeds und aktuellen Informationsangeboten.",
         "published": "",
         "score": 9,
         "level": "Hoch",
-        "practical_note": "Für Prüfdienstleister wichtig zur gezielten Beobachtung relevanter Normen wie EN 50678 / EN 50699 und verwandter Standards.",
-    },
-    {
-        "title": "CERT@VDE – RSS Feeds",
-        "source": "CERT@VDE",
-        "category": "vde_normen",
-        "link": "https://cert.vde.com/en/service/rss-feeds/",
-        "summary": "VDE-nahe News- und Advisory-Feeds für technische Sicherheits- und Produktthemen.",
-        "published": "",
-        "score": 7,
-        "level": "Mittel",
-        "practical_note": "Besonders interessant bei Produktsicherheit, Industrial Security und gerätenahen Sicherheitsthemen.",
+        "practical_note": "Wichtige Einstiegsquelle für DGUV-nahe Inhalte mit Bezug zu Prävention und betrieblicher Praxis.",
     },
 ]
 
@@ -118,8 +162,12 @@ HIGH_KEYWORDS = [
     "elektrisch",
     "regelwerk",
     "befähigte person",
-    "gefahrstoff",
     "prävention",
+    "blitzschutz",
+    "überspannungsschutz",
+    "netztechnik",
+    "schutztechnik",
+    "zertifizierung",
 ]
 
 MEDIUM_KEYWORDS = [
@@ -136,13 +184,16 @@ MEDIUM_KEYWORDS = [
     "update",
     "advisory",
     "bulletin",
+    "newsletter",
+    "standard",
+    "norm",
 ]
 
 PRACTICE_HINTS = [
-    "Für Prüfdienstleister sind Änderungen bei Arbeitsschutz, BetrSichV/TRBS, DGUV-Umfeld und Normen besonders relevant, wenn sie Prüforganisation, Prüftiefe, Fristen oder Dokumentation beeinflussen.",
-    "Beim Normenumfeld sollte immer geprüft werden, ob sich die Änderung direkt auf Arbeitsanweisungen, Messabläufe oder Protokolle auswirkt.",
-    "VDE-/Normenquellen sind fachlich besonders wichtig, auch wenn es dafür nicht immer einen einfachen offenen News-RSS wie bei klassischen Medien gibt.",
-    "Hersteller- und Technikbeiträge sind nützlich, sollten aber für einen Prüfdienstleister immer von amtlichen und regelwerksnahen Quellen getrennt bewertet werden.",
+    "Für Prüfdienstleister sind Änderungen bei Arbeitsschutz, DGUV-/BG-Umfeld, VDE-/Normenumfeld und technischer Sicherheit besonders relevant, wenn sie Prüforganisation, Prüftiefe, Fristen oder Dokumentation beeinflussen.",
+    "Beim VDE-/Normenumfeld sollte immer geprüft werden, ob sich Änderungen direkt auf Arbeitsanweisungen, Messabläufe, Formulare oder Kundenberichte auswirken.",
+    "VDE-Newsletter sind wertvolle Hinweisquellen, ersetzen aber keine gezielte Beobachtung der konkret für euch relevanten Normen und Standardseiten.",
+    "Amtliche und regelwerksnahe Quellen sollten für Entscheidungen immer höher gewichtet werden als allgemeine Technik- oder Produktinformationen.",
 ]
 
 TITLE_HINTS = [
@@ -152,7 +203,9 @@ TITLE_HINTS = [
     ("VDE", "Kann normativ oder technisch für Prüfabläufe, Messverfahren oder Dokumentation relevant sein."),
     ("50678", "Betrifft typischerweise Prüfungen nach Reparatur bzw. das zugehörige Normenumfeld."),
     ("50699", "Betrifft typischerweise Wiederholungsprüfungen bzw. das zugehörige Normenumfeld."),
-    ("Rückruf", "Kann für Produktsicherheit und Kundenhinweise praktisch relevant sein."),
+    ("Blitzschutz", "Kann für Anlagenprüfung, Schutzkonzepte und Dokumentationsanforderungen relevant sein."),
+    ("FNN", "Kann für Netztechnik, Betriebsmittel oder Schutztechnik im energietechnischen Umfeld relevant sein."),
+    ("Newsletter", "Als Hinweisquelle geeignet; konkreten Prüfbezug im Einzelfall bewerten."),
     ("Advisory", "Auf konkrete Produkt- oder Sicherheitsrelevanz für den Prüfalltag prüfen."),
 ]
 
@@ -216,6 +269,8 @@ def score_item(title: str, summary: str, category: str, source_priority: int) ->
         score += 3
     elif category == "vde_normen":
         score += 3
+    elif category == "vde_newsletter":
+        score += 2
     elif category == "messgeraete":
         score += 2
 
@@ -244,6 +299,8 @@ def derive_practical_note(title: str, summary: str, category: str) -> str:
         return "Auf Auswirkungen auf Gefährdungsbeurteilung, Prüforganisation, Dokumentation und betriebliche Abläufe prüfen."
     if category == "vde_normen":
         return "Auf Änderungen mit direktem Einfluss auf Prüfabläufe, Messverfahren oder Prüfanweisungen prüfen."
+    if category == "vde_newsletter":
+        return "Als Hinweisquelle nutzen und auf konkreten Prüfbezug, Normenbezug oder technischen Praxisnutzen prüfen."
     if category == "messgeraete":
         return "Auf praktische Relevanz für eingesetzte Prüfgeräte, Software oder Kalibrierprozesse prüfen."
     return "Thema fachlich auf Relevanz für Prüfdienstleistungen einordnen."
@@ -330,7 +387,7 @@ def collect_items() -> list[dict]:
 
     collected.extend(STATIC_REFERENCES)
     collected.sort(key=lambda x: (x["score"], x["published"]), reverse=True)
-    return collected[:14]
+    return collected[:16]
 
 
 def entry_line(item: dict) -> str:
@@ -362,11 +419,12 @@ def build_section(title: str, items: list[dict], empty_text: str) -> str:
 def build_weekly_html(items: list[dict], generated: datetime) -> str:
     arbeit = [x for x in items if x["category"] == "arbeitssicherheit"]
     normen = [x for x in items if x["category"] == "vde_normen"]
+    newsletter = [x for x in items if x["category"] == "vde_newsletter"]
     geraete = [x for x in items if x["category"] == "messgeraete"]
 
     intro = (
         "Dieses Weekly wurde automatisch und kostenlos aus öffentlich erreichbaren Quellen erzeugt. "
-        "Es ist auf Arbeitssicherheit, Normenumfeld und Praxisrelevanz für Prüfdienstleister ausgerichtet."
+        "Es ist auf Arbeitssicherheit, VDE-/Normenumfeld, VDE-Newsletter-Hinweise und Praxisrelevanz für Prüfdienstleister ausgerichtet."
     )
 
     blocks = []
@@ -386,6 +444,14 @@ def build_weekly_html(items: list[dict], generated: datetime) -> str:
             "VDE / Normenumfeld / technische Sicherheit",
             normen[:6],
             "Diese Woche keine relevanten Einträge aus dem VDE-/Normenumfeld gefunden.",
+        )
+    )
+
+    blocks.append(
+        build_section(
+            "VDE Newsletter / beobachtete VDE-Quellen",
+            newsletter[:6],
+            "Diese Woche keine zusätzlichen VDE-Newsletter-/Monitoring-Hinweise gefunden.",
         )
     )
 
@@ -435,7 +501,7 @@ def build_xml(html_description: str, generated: datetime) -> str:
   <channel>
     <title>Prüfdienstleister Weekly Update</title>
     <link>{REPO_BASE_URL}/prueftechniker-weekly.xml</link>
-    <description>Kostenlos automatisch erzeugtes Weekly zu Arbeitssicherheit, VDE-/Normenumfeld und relevanten Themen für Prüfdienstleister.</description>
+    <description>Kostenlos automatisch erzeugtes Weekly zu Arbeitssicherheit, VDE-/Normenumfeld, VDE-Newslettern und relevanten Themen für Prüfdienstleister.</description>
     <language>de-de</language>
     <lastBuildDate>{pub_date}</lastBuildDate>
     <ttl>10080</ttl>
@@ -467,7 +533,7 @@ def main():
                 "generated_at": generated.isoformat(),
                 "status": "ok-free-mode",
                 "mode": "free-no-api",
-                "scope": "arbeitssicherheit-vde-pruefdienstleister",
+                "scope": "arbeitssicherheit-vde-newsletter-pruefdienstleister",
                 "items": items,
                 "html_preview": html_output,
             },
@@ -477,7 +543,7 @@ def main():
         encoding="utf-8",
     )
 
-    print("[INFO] Prüfdienstleister Weekly erzeugt")
+    print("[INFO] Prüfdienstleister Weekly mit VDE-Newsletter-Monitoring erzeugt")
     print("[INFO] weekly-data.json aktualisiert")
     print("[INFO] prueftechniker-weekly.xml aktualisiert")
 
