@@ -201,6 +201,10 @@
       box-shadow:0 0 0 1px rgba(227,54,54,.18) inset;
     }
 
+    .card.error{
+      border:2px solid rgba(255,180,0,.65);
+    }
+
     .card h3{
       margin:0 0 8px;
       font-size:17px;
@@ -230,6 +234,7 @@
       color:#eef3fb;
       margin:0 0 14px;
       line-height:1.45;
+      white-space:pre-wrap;
     }
 
     .actions{
@@ -270,6 +275,18 @@
       margin:18px 0;
     }
 
+    .status-box{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:10px;
+      background:#0d1628;
+      border:1px solid #304567;
+      color:#d9e5f9;
+      font-size:13px;
+      line-height:1.4;
+      white-space:pre-wrap;
+    }
+
     @media (max-width: 900px){
       .grid{
         grid-template-columns:1fr;
@@ -302,6 +319,8 @@
           <button class="btn-primary" id="saveFeedBtn">Feed speichern</button>
           <button class="btn-outline" id="loadFeedBtn">Jetzt laden</button>
         </div>
+
+        <div id="statusBox" class="status-box">Noch kein Feed geladen.</div>
 
         <p class="subtext">
           Wichtig: Hier muss die <strong>direkte XML-Datei</strong> rein, nicht nur die normale Website-URL.
@@ -451,6 +470,7 @@
     const manualContentInput = document.getElementById("manualContent");
     const searchInput = document.getElementById("searchInput");
     const feedList = document.getElementById("feedList");
+    const statusBox = document.getElementById("statusBox");
 
     function escapeHtml(str = "") {
       return str
@@ -471,11 +491,7 @@
       if (!dateString) return "";
       const d = new Date(dateString);
       if (isNaN(d.getTime())) return "";
-      return d.toLocaleDateString("de-DE", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
-      });
+      return d.toLocaleDateString("de-DE");
     }
 
     function getManualEntries() {
@@ -490,9 +506,14 @@
       localStorage.setItem(STORAGE_KEYS.manualEntries, JSON.stringify(entries));
     }
 
+    function setStatus(message) {
+      statusBox.textContent = message;
+    }
+
     function saveWeeklyFeedUrl() {
       const url = weeklyFeedUrlInput.value.trim();
       localStorage.setItem(STORAGE_KEYS.weeklyFeedUrl, url);
+      setStatus("Feed-URL gespeichert:\n" + (url || "(leer)"));
       alert("Feed-URL gespeichert.");
     }
 
@@ -541,13 +562,17 @@
 
     function parseRssXml(xmlText) {
       const parser = new DOMParser();
-      const xml = parser.parseFromString(xmlText, "text/xml");
+      const xml = parser.parseFromString(xmlText, "application/xml");
       const parserError = xml.querySelector("parsererror");
       if (parserError) {
-        throw new Error("RSS/XML konnte nicht gelesen werden.");
+        throw new Error("XML-Parserfehler: Die Datei ist kein gültiges RSS/XML.");
       }
 
       const items = Array.from(xml.querySelectorAll("item"));
+      if (!items.length) {
+        throw new Error("Keine <item>-Einträge im Feed gefunden.");
+      }
+
       return items.map((item, index) => {
         const title = item.querySelector("title")?.textContent?.trim() || "Ohne Titel";
         const link = item.querySelector("link")?.textContent?.trim() || "";
@@ -561,7 +586,7 @@
           source: "Weekly RSS",
           category: "weekly",
           date: normalizeDate(pubDate),
-          description: stripHtml(description).slice(0, 350) || "Kein Kurzinhalt vorhanden.",
+          description: stripHtml(description).slice(0, 500) || "Kein Kurzinhalt vorhanden.",
           link
         };
       });
@@ -572,28 +597,61 @@
       weeklyEntries = [];
 
       if (!url) {
+        setStatus("Keine Feed-URL eingetragen.");
         render();
         return;
       }
 
       try {
-        const response = await fetch(url, { cache: "no-store" });
+        setStatus("Lade Feed...\n" + url);
+
+        const response = await fetch(url, {
+          method: "GET",
+          cache: "no-store"
+        });
+
         if (!response.ok) {
-          throw new Error("Feed nicht erreichbar.");
+          throw new Error("HTTP-Fehler " + response.status + " " + response.statusText);
         }
 
         const text = await response.text();
+
+        if (!text.trim()) {
+          throw new Error("Die Datei ist leer.");
+        }
+
+        if (!text.includes("<rss") && !text.includes("<feed") && !text.includes("<item")) {
+          throw new Error("Die geladene Datei sieht nicht wie RSS/XML aus.");
+        }
+
         weeklyEntries = parseRssXml(text);
+
+        setStatus(
+          "Feed erfolgreich geladen.\n" +
+          "URL: " + url + "\n" +
+          "Einträge: " + weeklyEntries.length
+        );
       } catch (error) {
-        console.warn("Weekly Feed konnte nicht geladen werden:", error);
+        const message =
+          "Feed konnte nicht geladen werden.\n" +
+          "URL: " + url + "\n" +
+          "Fehler: " + error.message + "\n\n" +
+          "Prüfe:\n" +
+          "1. Zeigt die URL direkt auf .../prueftechniker-weekly.xml?\n" +
+          "2. Ist die Datei über GitHub Pages öffentlich erreichbar?\n" +
+          "3. Liegt die Datei im selben Repo wie index.html?\n" +
+          "4. Ist die XML gültig?";
+
+        setStatus(message);
+
         weeklyEntries = [{
           id: "weekly-error",
           title: "Weekly-Feed konnte nicht geladen werden",
           source: "Systemhinweis",
           category: "weekly",
-          date: "",
-          description: "Prüfe, ob die eingetragene URL direkt auf deine XML-Datei zeigt, z. B. .../prueftechniker-weekly.xml",
-          link: ""
+          date: normalizeDate(new Date().toISOString()),
+          description: message,
+          link: url || ""
         }];
       }
 
@@ -642,13 +700,17 @@
       }
 
       feedList.innerHTML = entries.map(entry => {
-        const cardClass = entry.category === "weekly" ? "card weekly" : "card";
+        const extraClass =
+          entry.category === "weekly"
+            ? (entry.source === "Systemhinweis" ? "card weekly error" : "card weekly")
+            : "card";
+
         const linkButton = entry.link
           ? `<a href="${escapeHtml(entry.link)}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a>`
           : "";
 
         return `
-          <article class="${cardClass}">
+          <article class="${extraClass}">
             <h3>${escapeHtml(entry.title)}</h3>
             <div class="chips">
               <span class="chip">${escapeHtml(entry.source || "Quelle")}</span>
