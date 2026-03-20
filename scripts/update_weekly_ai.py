@@ -15,8 +15,11 @@ from bs4 import BeautifulSoup
 REPO_BASE_URL = "https://leistungsliste.github.io/Pr-tleck"
 OUTPUT_XML = Path("prueftechniker-weekly.xml")
 OUTPUT_JSON = Path("weekly-data.json")
-OPENAI_API_URL = "https://api.openai.com/v1/responses"
+
+OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions"
 OPENAI_MODEL = "gpt-4.1-mini"
+
+USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/1.0)"
 
 SOURCES = [
     {
@@ -49,14 +52,14 @@ SOURCES = [
     },
 ]
 
-STATIC_FALLBACK_SUMMARY = """<h3>Prüftechniker Weekly</h3>
-<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>
-"""
+STATIC_PRACTICE_HINTS = [
+    "Für Prüftechniker sind vor allem Änderungen mit Auswirkung auf Prüffristen, Dokumentation, Normenumstellungen und Gerätesoftware relevant.",
+    "Herstellerquellen sind nützlich für Gerätefunktionen und Softwarestände, offizielle Quellen bleiben aber maßgeblich für die fachliche Einordnung.",
+    "Neue Beiträge sollten darauf geprüft werden, ob sie OVV, ortsfeste Anlagen, Maschinenprüfung oder nur Produktmarketing betreffen.",
+]
 
-USER_AGENT = "Mozilla/5.0 (compatible; PrueftechnikerWeeklyBot/1.0)"
 
-
-def now_utc():
+def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
 
@@ -84,24 +87,20 @@ def fetch_page_excerpt(url: str) -> str:
             headers={"User-Agent": USER_AGENT},
         )
         response.raise_for_status()
-        text = strip_html(response.text)
-        return truncate(text, 1600)
+        return truncate(strip_html(response.text), 1600)
     except Exception as exc:
         return f"Seite konnte nicht geladen werden: {exc}"
 
 
-def parse_feed(source: dict) -> list:
+def parse_feed(source: dict) -> list[dict]:
     parsed = feedparser.parse(source["feed_url"])
     items = []
 
     for entry in parsed.entries[: source["max_items"]]:
         title = (entry.get("title") or "").strip()
         link = (entry.get("link") or source["fallback_url"]).strip()
-        summary = strip_html(
-            entry.get("summary")
-            or entry.get("description")
-            or ""
-        )
+        summary = strip_html(entry.get("summary") or entry.get("description") or "")
+
         published = ""
         if entry.get("published_parsed"):
             try:
@@ -111,21 +110,24 @@ def parse_feed(source: dict) -> list:
                 published = ""
 
         if title:
-            items.append({
-                "source": source["name"],
-                "category": source["category"],
-                "title": title,
-                "link": link,
-                "summary": truncate(summary, 900),
-                "published": published,
-                "page_excerpt": fetch_page_excerpt(link),
-            })
+            items.append(
+                {
+                    "source": source["name"],
+                    "category": source["category"],
+                    "title": title,
+                    "link": link,
+                    "summary": truncate(summary, 900),
+                    "published": published,
+                    "page_excerpt": fetch_page_excerpt(link),
+                }
+            )
 
     return items
 
 
-def collect_items() -> list:
+def collect_items() -> list[dict]:
     collected = []
+
     for source in SOURCES:
         try:
             source_items = parse_feed(source)
@@ -133,37 +135,42 @@ def collect_items() -> list:
             collected.extend(source_items)
         except Exception as exc:
             print(f"[WARN] Feed-Laden fehlgeschlagen: {source['name']} -> {exc}")
-            collected.append({
-                "source": source["name"],
-                "category": source["category"],
-                "title": f"Quelle konnte nicht geladen werden: {source['name']}",
-                "link": source["fallback_url"],
-                "summary": f"Automatischer Hinweis: Feed-Laden fehlgeschlagen ({exc}).",
-                "published": "",
-                "page_excerpt": "",
-            })
+            collected.append(
+                {
+                    "source": source["name"],
+                    "category": source["category"],
+                    "title": f"Quelle konnte nicht geladen werden: {source['name']}",
+                    "link": source["fallback_url"],
+                    "summary": f"Automatischer Hinweis: Feed-Laden fehlgeschlagen ({exc}).",
+                    "published": "",
+                    "page_excerpt": "",
+                }
+            )
+
     return collected
 
 
-def build_ai_prompt(items: list) -> str:
+def build_ai_prompt(items: list[dict]) -> str:
     lines = []
-    lines.append(
-        "Erstelle ein deutsches, fachlich vorsichtig formuliertes Weekly für Prüftechniker."
-    )
-    lines.append(
-        "Zielgruppe: Prüftechniker für elektrische Prüfungen, Betriebsmittel, Anlagen, Normenumfeld."
-    )
-    lines.append(
-        "Wichtig: Keine erfundenen Fakten. Wenn etwas unklar ist, als Hinweis oder Tendenz formulieren."
-    )
-    lines.append("Struktur in HTML:")
-    lines.append("1. <h3>Prüftechniker Weekly</h3>")
-    lines.append("2. Kurze Einleitung als <p>")
-    lines.append("3. <h4>Offizielle Quellen / Normen / Regeln</h4> mit <ul><li>...</li></ul>")
-    lines.append("4. <h4>Messgeräte / Hersteller</h4> mit <ul><li>...</li></ul>")
-    lines.append("5. <h4>Praxisrelevanz</h4> mit <ul><li>...</li></ul>")
-    lines.append("6. <h4>Quellen</h4> mit <ul><li><a href='...'>Titel</a> – Quelle</li></ul>")
-    lines.append("Bitte nur kompaktes HTML ohne Markdown.")
+    lines.append("Erstelle ein deutsches Weekly für Prüftechniker.")
+    lines.append("Zielgruppe: Prüftechniker für elektrische Prüfungen, Betriebsmittel, Anlagen, Normenumfeld.")
+    lines.append("Wichtig: Keine erfundenen Fakten. Nur vorsichtige, nützliche Formulierungen.")
+    lines.append("Wenn Informationen unklar sind, formuliere zurückhaltend.")
+    lines.append("")
+    lines.append("Ausgabeformat:")
+    lines.append("- Reines HTML")
+    lines.append("- Kein Markdown")
+    lines.append("- Nutze genau diese Struktur:")
+    lines.append("  <h3>Prüftechniker Weekly</h3>")
+    lines.append("  <p>Kurze Einleitung</p>")
+    lines.append("  <h4>Offizielle Quellen / Normen / Regeln</h4><ul>...</ul>")
+    lines.append("  <h4>Messgeräte / Hersteller</h4><ul>...</ul>")
+    lines.append("  <h4>Praxisrelevanz</h4><ul>...</ul>")
+    lines.append("  <h4>Quellen</h4><ul>...</ul>")
+    lines.append("")
+    lines.append("Praxis-Hinweise, die berücksichtigt werden sollen:")
+    for hint in STATIC_PRACTICE_HINTS:
+        lines.append(f"- {hint}")
     lines.append("")
     lines.append("Hier sind die gesammelten Quellen:")
     lines.append("")
@@ -194,35 +201,27 @@ def call_openai(prompt: str) -> str:
 
     payload = {
         "model": OPENAI_MODEL,
-        "input": [
+        "messages": [
             {
                 "role": "system",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": (
-                            "Du bist ein Fachredakteur für Prüftechniker. "
-                            "Erstelle vorsichtige, nützliche, gut strukturierte HTML-Zusammenfassungen "
-                            "ohne erfundene Details."
-                        ),
-                    }
-                ],
+                "content": (
+                    "Du bist ein Fachredakteur für Prüftechniker. "
+                    "Schreibe präzise, vorsichtig, hilfreich und ohne Halluzinationen. "
+                    "Nutze nur die bereitgestellten Informationen und liefere HTML."
+                ),
             },
             {
                 "role": "user",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": prompt,
-                    }
-                ],
+                "content": prompt,
             },
         ],
+        "temperature": 0.3,
     }
 
-    print("[INFO] Sende Anfrage an OpenAI API ...")
+    print("[INFO] Sende Anfrage an OpenAI ...")
+
     response = requests.post(
-        OPENAI_API_URL,
+        OPENAI_CHAT_URL,
         headers=headers,
         json=payload,
         timeout=120,
@@ -230,38 +229,39 @@ def call_openai(prompt: str) -> str:
 
     print(f"[INFO] OpenAI HTTP-Status: {response.status_code}")
 
-    if not response.ok:
-        body_preview = response.text[:1500]
+    if response.status_code != 200:
+        body_preview = response.text[:2000]
         raise RuntimeError(f"OpenAI API Fehler {response.status_code}: {body_preview}")
 
     data = response.json()
 
-    output_text = ""
-    for item in data.get("output", []):
-        if item.get("type") == "message":
-            for content in item.get("content", []):
-                if content.get("type") == "output_text":
-                    output_text += content.get("text", "")
+    try:
+        text = data["choices"][0]["message"]["content"]
+    except Exception:
+        raise RuntimeError(f"Unerwartete API-Antwort: {json.dumps(data)[:2000]}")
 
-    output_text = output_text.strip()
-    if not output_text:
+    if not text or not text.strip():
         raise RuntimeError("Keine Textausgabe von der OpenAI API erhalten.")
 
     print("[INFO] KI-Zusammenfassung erfolgreich erzeugt.")
-    return output_text
+    return text.strip()
 
 
-def build_fallback_html(items: list, reason: str) -> str:
+def build_fallback_html(items: list[dict], reason: str) -> str:
     blocks = [
-        STATIC_FALLBACK_SUMMARY,
+        "<h3>Prüftechniker Weekly</h3>",
+        "<p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>",
         f"<p><b>Fehler:</b> {safe_text(reason)}</p>",
-        "<h4>Quellen</h4><ul>"
+        "<h4>Quellen</h4>",
+        "<ul>",
     ]
+
     for item in items:
         title = safe_text(item["title"])
         source = safe_text(item["source"])
         link = safe_text(item["link"])
-        blocks.append(f"<li><a href=\"{link}\">{title}</a> – {source}</li>")
+        blocks.append(f'<li><a href="{link}">{title}</a> – {source}</li>')
+
     blocks.append("</ul>")
     return "\n".join(blocks)
 
