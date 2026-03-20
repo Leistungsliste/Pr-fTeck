@@ -5,27 +5,27 @@
     <link>https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml</link>
     <description>Automatisch erzeugtes Weekly mit KI-Zusammenfassung zu VDE, DGUV, TRBS, Prüfpraxis, Messgeräten und Software.</description>
     <language>de-de</language>
-    <lastBuildDate>Fri, 20 Mar 2026 10:36:37 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Mar 2026 10:48:00 +0000</lastBuildDate>
     <ttl>10080</ttl>
 
     <item>
       <title>Prüftechniker Weekly – 20.03.2026</title>
       <link>https://leistungsliste.github.io/Pr-tleck/</link>
-      <guid>prueftechniker-weekly-2026-03-20-103637</guid>
-      <pubDate>Fri, 20 Mar 2026 10:36:37 +0000</pubDate>
+      <guid>prueftechniker-weekly-2026-03-20-104800</guid>
+      <pubDate>Fri, 20 Mar 2026 10:48:00 +0000</pubDate>
       <description><![CDATA[
 <h3>Prüftechniker Weekly</h3>
 <p>Die KI-Zusammenfassung konnte diesmal nicht erzeugt werden. Unten findest du trotzdem die automatisch gesammelten Quellenlinks.</p>
-
 <p><b>Fehler:</b> OpenAI API Fehler 429: {
-  &quot;error&quot;: {
-    &quot;message&quot;: &quot;You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.&quot;,
-    &quot;type&quot;: &quot;insufficient_quota&quot;,
-    &quot;param&quot;: null,
-    &quot;code&quot;: &quot;insufficient_quota&quot;
-  }
+    &quot;error&quot;: {
+        &quot;message&quot;: &quot;You exceeded your current quota, please check your plan and billing details. For more information on this error, read the docs: https://platform.openai.com/docs/guides/error-codes/api-errors.&quot;,
+        &quot;type&quot;: &quot;insufficient_quota&quot;,
+        &quot;param&quot;: null,
+        &quot;code&quot;: &quot;insufficient_quota&quot;
+    }
 }</p>
-<h4>Quellen</h4><ul>
+<h4>Quellen</h4>
+<ul>
 </ul>
       ]]></description>
     </item>
