@@ -1,845 +1,239 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Prüftechniker Feed Hub</title>
-  <meta name="theme-color" content="#b30000" />
-  <style>
-    :root{
-      --bg:#09101c;
-      --card:#131d30;
-      --card2:#19253b;
-      --text:#f4f7fb;
-      --muted:#b6c2d8;
-      --line:#243552;
-      --red:#c31414;
-      --red2:#e33636;
-      --green:#173a24;
-      --green-border:#2ca45c;
-      --blue:#5aa2ff;
-      --chip:#0f1a2f;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prüfdienstleister Weekly</title>
 
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{
-      font-family:Arial, Helvetica, sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(195,20,20,.18), transparent 25%),
-        radial-gradient(circle at top right, rgba(90,162,255,.10), transparent 20%),
-        linear-gradient(180deg,#07101d,#0a1220 40%,#09101c);
-      min-height:100vh;
-    }
+<style>
+:root{
+  --green:#8db255;
+  --dark:#0f1720;
+  --gray:#f4f6f8;
+  --border:#e3e6ea;
+  --text:#1b1f23;
+}
 
-    .topbar{
-      background:linear-gradient(180deg,#be1010,#980909);
-      padding:22px 24px 16px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-    }
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  color:var(--text);
+  background:#fff;
+}
 
-    .topbar h1{
-      margin:0;
-      font-size:20px;
-      line-height:1.2;
-    }
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  border-bottom:1px solid var(--border);
+}
 
-    .topbar p{
-      margin:6px 0 0;
-      color:#ffe5e5;
-      font-size:14px;
-    }
+.logo{
+  font-size:22px;
+  font-weight:bold;
+}
 
-    .wrap{
-      max-width:1180px;
-      margin:0 auto;
-      padding:22px;
-    }
+.nav{
+  display:flex;
+  gap:20px;
+}
 
-    .grid{
-      display:grid;
-      grid-template-columns:340px 1fr;
-      gap:18px;
-      align-items:start;
-    }
+.nav a{
+  text-decoration:none;
+  color:#333;
+  font-weight:500;
+}
 
-    .panel{
-      background:linear-gradient(180deg,rgba(19,29,48,.96),rgba(15,23,39,.96));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:16px;
-    }
+.btn{
+  background:var(--green);
+  color:#fff;
+  padding:10px 18px;
+  border:none;
+  cursor:pointer;
+}
 
-    .panel h2{
-      margin:0 0 12px;
-      font-size:18px;
-    }
+/* HERO */
+.hero{
+  padding:60px 40px;
+  background:var(--gray);
+  font-size:28px;
+  font-weight:bold;
+}
 
-    .hint{
-      background:var(--green);
-      border:1px solid var(--green-border);
-      color:#eaf9ef;
-      padding:12px;
-      border-radius:12px;
-      margin-bottom:14px;
-    }
+/* LAYOUT */
+.container{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:20px;
+  padding:30px 40px;
+}
 
-    .status-card{
-      background:#0d1628;
-      border:1px solid #304567;
-      border-radius:12px;
-      padding:12px;
-      margin-top:10px;
-      line-height:1.45;
-      font-size:14px;
-    }
+/* SIDEBAR */
+.sidebar{
+  border:1px solid var(--border);
+  padding:20px;
+}
 
-    .status-line{
-      margin:4px 0;
-      color:#dbe8ff;
-    }
+.sidebar h3{
+  margin-top:0;
+}
 
-    .mode-free{
-      color:#9dffb5;
-      font-weight:bold;
-    }
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border:1px solid var(--border);
+}
 
-    .subtext{
-      color:var(--muted);
-      font-size:14px;
-      margin:0 0 14px;
-    }
+/* FEED */
+.feed{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
 
-    label{
-      display:block;
-      margin:12px 0 6px;
-      font-weight:bold;
-      font-size:14px;
-    }
+.card{
+  border:1px solid var(--border);
+  padding:20px;
+}
 
-    input, select, textarea{
-      width:100%;
-      background:#0a1324;
-      color:var(--text);
-      border:1px solid #304567;
-      border-radius:10px;
-      padding:11px 12px;
-      font-size:14px;
-      outline:none;
-    }
+.card.weekly{
+  border-left:6px solid var(--green);
+  background:#f9fbf6;
+}
 
-    textarea{
-      min-height:105px;
-      resize:vertical;
-    }
+.chips{
+  margin:10px 0;
+}
 
-    input:focus, select:focus, textarea:focus{
-      border-color:var(--blue);
-      box-shadow:0 0 0 3px rgba(90,162,255,.12);
-    }
+.chip{
+  display:inline-block;
+  background:#eef2f5;
+  padding:5px 10px;
+  margin-right:5px;
+  font-size:12px;
+}
 
-    .btnrow{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
+.search{
+  width:100%;
+  padding:12px;
+  margin-bottom:20px;
+}
 
-    button{
-      appearance:none;
-      border:none;
-      border-radius:10px;
-      background:#1c2a45;
-      color:#fff;
-      padding:10px 14px;
-      font-weight:bold;
-      cursor:pointer;
-      transition:.2s ease;
-    }
-
-    button:hover{
-      transform:translateY(-1px);
-      filter:brightness(1.08);
-    }
-
-    .btn-primary{
-      background:linear-gradient(180deg,var(--red2),var(--red));
-    }
-
-    .btn-outline{
-      background:#111b2f;
-      border:1px solid #344a70;
-    }
-
-    .filters{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin:14px 0;
-    }
-
-    .filter-btn.active{
-      background:linear-gradient(180deg,var(--red2),var(--red));
-    }
-
-    .toolbar{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:10px;
-      align-items:start;
-      margin-bottom:12px;
-    }
-
-    .toolbar-note{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.3;
-      padding-top:2px;
-    }
-
-    .feed-list{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-
-    .card{
-      background:linear-gradient(90deg,var(--card2),var(--card));
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:16px;
-    }
-
-    .card.weekly{
-      border:2px solid rgba(227,54,54,.72);
-      box-shadow:0 0 0 1px rgba(227,54,54,.18) inset;
-    }
-
-    .card h3{
-      margin:0 0 8px;
-      font-size:17px;
-      line-height:1.35;
-    }
-
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-bottom:10px;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      background:var(--chip);
-      border:1px solid #304567;
-      color:#d9e5f9;
-      font-size:12px;
-      border-radius:999px;
-      padding:4px 10px;
-    }
-
-    .chip-high{
-      border-color:#b13b3b;
-      color:#ffd5d5;
-      background:#2a1414;
-    }
-
-    .chip-medium{
-      border-color:#a88a2c;
-      color:#fff0c2;
-      background:#231d0b;
-    }
-
-    .chip-info{
-      border-color:#3c5b8f;
-      color:#d8e6ff;
-      background:#0f1c34;
-    }
-
-    .desc{
-      color:#eef3fb;
-      margin:0 0 14px;
-      line-height:1.5;
-      white-space:pre-wrap;
-    }
-
-    .actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-
-    .actions a{
-      display:inline-block;
-      text-decoration:none;
-      background:#182640;
-      color:#fff;
-      border:1px solid #35507a;
-      padding:10px 14px;
-      border-radius:10px;
-      font-weight:bold;
-    }
-
-    .empty{
-      color:var(--muted);
-      text-align:center;
-      padding:22px;
-      border:1px dashed #35507a;
-      border-radius:14px;
-      background:#0d1628;
-    }
-
-    .small{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.4;
-    }
-
-    .divider{
-      height:1px;
-      background:var(--line);
-      margin:18px 0;
-    }
-
-    .weekly-html{
-      margin-top:10px;
-      padding:14px;
-      border-radius:12px;
-      background:#10192b;
-      border:1px solid #31476e;
-    }
-
-    .weekly-html h3,
-    .weekly-html h4{
-      margin:0 0 10px;
-      color:#fff;
-    }
-
-    .weekly-html p,
-    .weekly-html li{
-      line-height:1.5;
-      color:#eef3fb;
-    }
-
-    .weekly-html ul{
-      margin:8px 0 12px 18px;
-      padding:0;
-    }
-
-    .weekly-html a{
-      color:#9bc4ff;
-    }
-
-    @media (max-width: 950px){
-      .grid{
-        grid-template-columns:1fr;
-      }
-      .toolbar{
-        grid-template-columns:1fr;
-      }
-    }
-  </style>
+/* MOBILE */
+@media(max-width:900px){
+  .container{
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
+
 <body>
-  <div class="topbar">
-    <h1>🔧 Prüftechniker Feed Hub</h1>
-    <p>RSS-Feeds + automatisch eingebundenes Weekly-Update</p>
+
+<div class="header">
+  <div class="logo">DPS Weekly</div>
+  <div class="nav">
+    <a href="#">Unternehmen</a>
+    <a href="#">Leistungen</a>
+    <a href="#">Wissen</a>
+    <button class="btn">Anfragen</button>
+  </div>
+</div>
+
+<div class="hero">
+  WIR VERANTWORTEN DIE SICHERHEIT.<br>
+  DEIN WÖCHENTLICHES PRÜFDIENSTLEISTER UPDATE.
+</div>
+
+<div class="container">
+
+  <div class="sidebar">
+    <h3>Weekly Feed</h3>
+
+    <input id="feedUrl" value="./prueftechniker-weekly.xml">
+
+    <button onclick="loadFeed()" class="btn">Feed laden</button>
+
+    <p id="status"></p>
   </div>
 
-  <div class="wrap">
-    <div class="grid">
-      <aside class="panel">
-        <h2>Weekly-Integration</h2>
+  <div>
 
-        <div class="hint">
-          Das Weekly wird automatisch angezeigt, sobald dein RSS-Feed online erreichbar ist.
-        </div>
+    <input id="search" class="search" placeholder="Suche..." oninput="render()">
 
-        <label for="weeklyFeedUrl">URL deines Weekly-RSS-Feeds</label>
-        <input id="weeklyFeedUrl" type="text" placeholder="https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml" />
+    <div id="feed" class="feed"></div>
 
-        <div class="btnrow">
-          <button class="btn-primary" id="saveFeedBtn">Feed speichern</button>
-          <button class="btn-outline" id="loadFeedBtn">Jetzt laden</button>
-        </div>
+  </div>
 
-        <div class="status-card">
-          <div class="status-line"><strong>Modus:</strong> <span id="modeLabel" class="mode-free">wird geladen ...</span></div>
-          <div class="status-line"><strong>Status:</strong> <span id="statusLabel">–</span></div>
-          <div class="status-line"><strong>Letztes Update:</strong> <span id="generatedLabel">–</span></div>
-          <div class="status-line"><strong>Einträge:</strong> <span id="countLabel">–</span></div>
-        </div>
+</div>
 
-        <p class="subtext" style="margin-top:12px;">
-          Wichtig: Hier muss die direkte XML-Datei rein, nicht nur die normale Website-URL.
-        </p>
+<script>
+let entries=[]
 
-        <div class="divider"></div>
+function strip(html){
+  let div=document.createElement("div")
+  div.innerHTML=html
+  return div.textContent || div.innerText
+}
 
-        <h2>Fallback ohne Hosting</h2>
-        <p class="subtext">
-          Solange dein RSS-Feed noch nicht online ist, kannst du Weekly-Einträge manuell hinterlegen.
-        </p>
+async function loadFeed(){
+  const url=document.getElementById("feedUrl").value
 
-        <label for="manualTitle">Titel</label>
-        <input id="manualTitle" type="text" placeholder="z. B. Weekly Update KW 12/2026" />
+  try{
+    const res=await fetch(url)
+    const text=await res.text()
 
-        <label for="manualCategory">Bereich</label>
-        <select id="manualCategory">
-          <option value="weekly">Weekly</option>
-          <option value="normen">Normen</option>
-          <option value="geraete">Geräte</option>
-          <option value="praxis">Praxis</option>
-        </select>
+    const xml=new DOMParser().parseFromString(text,"text/xml")
+    const items=[...xml.querySelectorAll("item")]
 
-        <label for="manualLink">Link</label>
-        <input id="manualLink" type="text" placeholder="Optionaler Link zur Quelle oder zum Online-Feed" />
+    entries=items.map(item=>({
+      title:item.querySelector("title")?.textContent,
+      desc:item.querySelector("description")?.textContent,
+      date:item.querySelector("pubDate")?.textContent,
+      link:item.querySelector("link")?.textContent
+    }))
 
-        <label for="manualContent">Kurzinhalt</label>
-        <textarea id="manualContent" placeholder="Kurze Zusammenfassung des Wochen-Updates..."></textarea>
+    document.getElementById("status").innerText="Feed geladen ✔"
+    render()
 
-        <div class="btnrow">
-          <button class="btn-primary" id="addEntryBtn">Eintrag hinzufügen</button>
-          <button class="btn-outline" id="clearManualBtn">Manuelle Einträge löschen</button>
-        </div>
+  }catch{
+    document.getElementById("status").innerText="Fehler beim Laden"
+  }
+}
 
-        <p class="small">
-          Manuelle Einträge werden lokal im Browser gespeichert.
-        </p>
-      </aside>
+function render(){
+  const search=document.getElementById("search").value.toLowerCase()
 
-      <main class="panel">
-        <h2>Feed-Übersicht</h2>
-        <p class="subtext">Filtere nach Themen. Weekly-Einträge stehen immer oben.</p>
+  const container=document.getElementById("feed")
 
-        <div class="filters">
-          <button class="filter-btn active" data-filter="all">Alle</button>
-          <button class="filter-btn" data-filter="weekly">Weekly</button>
-          <button class="filter-btn" data-filter="normen">Normen</button>
-          <button class="filter-btn" data-filter="geraete">Geräte</button>
-          <button class="filter-btn" data-filter="praxis">Praxis</button>
-        </div>
+  const filtered=entries.filter(e=>
+    e.title.toLowerCase().includes(search) ||
+    strip(e.desc).toLowerCase().includes(search)
+  )
 
-        <div class="toolbar">
-          <input id="searchInput" type="text" placeholder="Suchen nach Titel, Quelle oder Inhalt..." />
-          <div class="btnrow">
-            <button class="btn-outline" id="refreshBtn">🔄 Aktualisieren</button>
-          </div>
-        </div>
+  if(!filtered.length){
+    container.innerHTML="<p>Keine Einträge</p>"
+    return
+  }
 
-        <div class="toolbar-note">
-          Hinweis: Fremde RSS-Feeds können je nach Server CORS blockieren. Dein eigener GitHub-Pages-Feed funktioniert am zuverlässigsten.
-        </div>
-
-        <div id="feedList" class="feed-list"></div>
-      </main>
+  container.innerHTML=filtered.map(e=>`
+    <div class="card weekly">
+      <h3>${e.title}</h3>
+      <div class="chips">
+        <span class="chip">Weekly</span>
+        <span class="chip">${new Date(e.date).toLocaleDateString()}</span>
+      </div>
+      <p>${strip(e.desc).slice(0,400)}</p>
+      <a href="${e.link}" target="_blank">Quelle öffnen</a>
     </div>
-  </div>
+  `).join("")
+}
 
-  <script>
-    const STORAGE_KEYS = {
-      weeklyFeedUrl: "prueftechniker_weekly_feed_url",
-      manualEntries: "prueftechniker_manual_entries"
-    };
+loadFeed()
+</script>
 
-    const staticEntries = [
-      {
-        id: "static-dguv",
-        title: "DGUV Publikationen",
-        source: "Offizielle Quelle",
-        category: "normen",
-        date: "",
-        description: "DGUV Vorschriften, Regeln und Informationen – relevant für DGUV Vorschrift 3 und Prüfpraxis.",
-        link: "https://publikationen.dguv.de/",
-        level: "Info"
-      },
-      {
-        id: "static-baua",
-        title: "BAuA – TRBS Übersicht",
-        source: "Offizielle Quelle",
-        category: "normen",
-        date: "",
-        description: "Technische Regeln für Betriebssicherheit, z. B. TRBS 1201 und angrenzende Themen.",
-        link: "https://www.baua.de/DE/Angebote/Regelwerk/TRBS/TRBS.html",
-        level: "Info"
-      },
-      {
-        id: "static-vde",
-        title: "VDE Verlag",
-        source: "Normen",
-        category: "normen",
-        date: "",
-        description: "Offizielle Normeninfos und Standardseiten zu DIN EN 50678, DIN EN 50699 und weiteren Normen.",
-        link: "https://www.vde-verlag.de/",
-        level: "Info"
-      },
-      {
-        id: "static-fluke",
-        title: "Fluke Learn / Blog",
-        source: "Hersteller",
-        category: "geraete",
-        date: "",
-        description: "Neue Geräte, Fachartikel und sicherheitsrelevante Beiträge aus der Messpraxis.",
-        link: "https://www.fluke.com/en/learn/blog",
-        level: "Info"
-      }
-    ];
-
-    let currentFilter = "all";
-    let weeklyEntries = [];
-    let weeklyMeta = null;
-
-    const weeklyFeedUrlInput = document.getElementById("weeklyFeedUrl");
-    const manualTitleInput = document.getElementById("manualTitle");
-    const manualCategoryInput = document.getElementById("manualCategory");
-    const manualLinkInput = document.getElementById("manualLink");
-    const manualContentInput = document.getElementById("manualContent");
-    const searchInput = document.getElementById("searchInput");
-    const feedList = document.getElementById("feedList");
-
-    const modeLabel = document.getElementById("modeLabel");
-    const statusLabel = document.getElementById("statusLabel");
-    const generatedLabel = document.getElementById("generatedLabel");
-    const countLabel = document.getElementById("countLabel");
-
-    function escapeHtml(str = "") {
-      return str
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function stripHtml(html = "") {
-      const tmp = document.createElement("div");
-      tmp.innerHTML = html;
-      return (tmp.textContent || tmp.innerText || "").trim();
-    }
-
-    function normalizeDate(dateString) {
-      if (!dateString) return "";
-      const d = new Date(dateString);
-      if (isNaN(d.getTime())) return "";
-      return d.toLocaleDateString("de-DE") + ", " + d.toLocaleTimeString("de-DE", {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
-    }
-
-    function getManualEntries() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEYS.manualEntries)) || [];
-      } catch {
-        return [];
-      }
-    }
-
-    function setManualEntries(entries) {
-      localStorage.setItem(STORAGE_KEYS.manualEntries, JSON.stringify(entries));
-    }
-
-    function saveWeeklyFeedUrl() {
-      const url = weeklyFeedUrlInput.value.trim();
-      localStorage.setItem(STORAGE_KEYS.weeklyFeedUrl, url);
-      alert("Feed-URL gespeichert.");
-    }
-
-    function loadSavedWeeklyFeedUrl() {
-      const saved = localStorage.getItem(STORAGE_KEYS.weeklyFeedUrl) || "https://leistungsliste.github.io/Pr-tleck/prueftechniker-weekly.xml";
-      weeklyFeedUrlInput.value = saved;
-      return saved;
-    }
-
-    function levelChip(level = "Info") {
-      const normalized = (level || "Info").toLowerCase();
-      if (normalized === "hoch") return `<span class="chip chip-high">Hoch</span>`;
-      if (normalized === "mittel") return `<span class="chip chip-medium">Mittel</span>`;
-      return `<span class="chip chip-info">Info</span>`;
-    }
-
-    function updateMetaUI() {
-      if (!weeklyMeta) {
-        modeLabel.textContent = "keine Daten";
-        statusLabel.textContent = "–";
-        generatedLabel.textContent = "–";
-        countLabel.textContent = "–";
-        return;
-      }
-
-      const mode = weeklyMeta.mode || "unbekannt";
-      const status = weeklyMeta.status || "–";
-      const generated = weeklyMeta.generated_at ? normalizeDate(weeklyMeta.generated_at) : "–";
-      const count = Array.isArray(weeklyMeta.items) ? weeklyMeta.items.length : 0;
-
-      modeLabel.textContent = mode === "free-no-api" ? "Kostenloser Modus aktiv" : mode;
-      statusLabel.textContent = status;
-      generatedLabel.textContent = generated;
-      countLabel.textContent = String(count);
-    }
-
-    function addManualEntry() {
-      const title = manualTitleInput.value.trim();
-      const category = manualCategoryInput.value;
-      const link = manualLinkInput.value.trim();
-      const content = manualContentInput.value.trim();
-
-      if (!title || !content) {
-        alert("Bitte mindestens Titel und Kurzinhalt eintragen.");
-        return;
-      }
-
-      const entries = getManualEntries();
-      entries.unshift({
-        id: "manual-" + Date.now(),
-        title,
-        source: "Manueller Eintrag",
-        category,
-        date: normalizeDate(new Date().toISOString()),
-        description: content,
-        link: link || "",
-        level: "Info"
-      });
-
-      setManualEntries(entries);
-
-      manualTitleInput.value = "";
-      manualLinkInput.value = "";
-      manualContentInput.value = "";
-
-      render();
-    }
-
-    function clearManualEntries() {
-      if (!confirm("Alle manuellen Einträge wirklich löschen?")) return;
-      setManualEntries([]);
-      render();
-    }
-
-    function parseRssXml(xmlText) {
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(xmlText, "application/xml");
-      const parserError = xml.querySelector("parsererror");
-      if (parserError) {
-        throw new Error("XML konnte nicht gelesen werden.");
-      }
-
-      const items = Array.from(xml.querySelectorAll("item"));
-      if (!items.length) return [];
-
-      return items.map((item, index) => {
-        const title = item.querySelector("title")?.textContent?.trim() || "Ohne Titel";
-        const link = item.querySelector("link")?.textContent?.trim() || "";
-        const description = item.querySelector("description")?.textContent?.trim() || "";
-        const pubDate = item.querySelector("pubDate")?.textContent?.trim() || "";
-        const guid = item.querySelector("guid")?.textContent?.trim() || `weekly-${index}`;
-
-        return {
-          id: guid,
-          title,
-          source: "Weekly RSS",
-          category: "weekly",
-          date: normalizeDate(pubDate),
-          description: stripHtml(description).slice(0, 500),
-          link,
-          rawHtml: description,
-          level: "Info"
-        };
-      });
-    }
-
-    async function loadWeeklyMeta(feedUrl) {
-      try {
-        const metaUrl = feedUrl.replace("prueftechniker-weekly.xml", "weekly-data.json");
-        const response = await fetch(metaUrl, { cache: "no-store" });
-        if (!response.ok) throw new Error("weekly-data.json nicht erreichbar");
-        weeklyMeta = await response.json();
-      } catch {
-        weeklyMeta = null;
-      }
-      updateMetaUI();
-    }
-
-    async function loadWeeklyFeed() {
-      const url = weeklyFeedUrlInput.value.trim();
-      weeklyEntries = [];
-
-      if (!url) {
-        weeklyMeta = null;
-        updateMetaUI();
-        render();
-        return;
-      }
-
-      try {
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error("Feed nicht erreichbar");
-
-        const text = await response.text();
-        weeklyEntries = parseRssXml(text);
-        await loadWeeklyMeta(url);
-
-        if (weeklyMeta && Array.isArray(weeklyMeta.items) && weeklyMeta.items.length) {
-          const sourceEntries = weeklyMeta.items.map((item, idx) => ({
-            id: "meta-" + idx + "-" + (item.title || idx),
-            title: item.title || "Ohne Titel",
-            source: item.source || "Quelle",
-            category: item.category || "weekly",
-            date: item.published || "",
-            description: item.summary || item.page_excerpt || "",
-            link: item.link || "",
-            level: item.level || "Info",
-            practical_note: item.practical_note || ""
-          }));
-
-          weeklyEntries = [...weeklyEntries, ...sourceEntries];
-        }
-      } catch {
-        weeklyMeta = {
-          mode: "Fehler",
-          status: "Feed konnte nicht geladen werden",
-          generated_at: "",
-          items: []
-        };
-        updateMetaUI();
-
-        weeklyEntries = [{
-          id: "weekly-error",
-          title: "Weekly-Feed konnte nicht geladen werden",
-          source: "Systemhinweis",
-          category: "weekly",
-          date: normalizeDate(new Date().toISOString()),
-          description: "Prüfe die Feed-URL oder hoste die XML-Datei öffentlich, z. B. über GitHub Pages.",
-          link: "",
-          level: "Info"
-        }];
-      }
-
-      render();
-    }
-
-    function getAllEntries() {
-      const manualEntries = getManualEntries();
-      const combined = [...weeklyEntries, ...manualEntries, ...staticEntries];
-
-      combined.sort((a, b) => {
-        const aWeekly = a.category === "weekly" ? 1 : 0;
-        const bWeekly = b.category === "weekly" ? 1 : 0;
-        if (aWeekly !== bWeekly) return bWeekly - aWeekly;
-        return 0;
-      });
-
-      return combined;
-    }
-
-    function matchesSearch(entry, term) {
-      if (!term) return true;
-      const haystack = [
-        entry.title,
-        entry.source,
-        entry.description,
-        entry.category,
-        entry.date,
-        entry.level,
-        entry.practical_note || "",
-        stripHtml(entry.rawHtml || "")
-      ].join(" ").toLowerCase();
-
-      return haystack.includes(term.toLowerCase());
-    }
-
-    function renderCard(entry) {
-      const isWeeklyMain = entry.source === "Weekly RSS" && entry.rawHtml;
-      const cardClass = entry.category === "weekly" ? "card weekly" : "card";
-
-      const chips = `
-        <div class="chips">
-          <span class="chip">${escapeHtml(entry.source || "Quelle")}</span>
-          <span class="chip">${escapeHtml(entry.category)}</span>
-          <span class="chip">${escapeHtml(entry.date || "ohne Datum")}</span>
-          ${levelChip(entry.level)}
-        </div>
-      `;
-
-      const actions = entry.link
-        ? `<div class="actions"><a href="${escapeHtml(entry.link)}" target="_blank" rel="noopener noreferrer">Quelle öffnen</a></div>`
-        : "";
-
-      if (isWeeklyMain) {
-        return `
-          <article class="${cardClass}">
-            <h3>${escapeHtml(entry.title)}</h3>
-            ${chips}
-            <div class="weekly-html">${entry.rawHtml}</div>
-            ${actions}
-          </article>
-        `;
-      }
-
-      const practice = entry.practical_note
-        ? `<p class="desc"><strong>Praxis:</strong> ${escapeHtml(entry.practical_note)}</p>`
-        : "";
-
-      return `
-        <article class="${cardClass}">
-          <h3>${escapeHtml(entry.title)}</h3>
-          ${chips}
-          <p class="desc">${escapeHtml(entry.description || "")}</p>
-          ${practice}
-          ${actions}
-        </article>
-      `;
-    }
-
-    function render() {
-      const searchTerm = searchInput.value.trim();
-      let entries = getAllEntries();
-
-      if (currentFilter !== "all") {
-        entries = entries.filter(entry => entry.category === currentFilter);
-      }
-
-      entries = entries.filter(entry => matchesSearch(entry, searchTerm));
-
-      if (!entries.length) {
-        feedList.innerHTML = `<div class="empty">Keine Einträge gefunden.</div>`;
-        return;
-      }
-
-      feedList.innerHTML = entries.map(renderCard).join("");
-    }
-
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentFilter = btn.dataset.filter;
-        render();
-      });
-    });
-
-    document.getElementById("saveFeedBtn").addEventListener("click", saveWeeklyFeedUrl);
-    document.getElementById("loadFeedBtn").addEventListener("click", loadWeeklyFeed);
-    document.getElementById("addEntryBtn").addEventListener("click", addManualEntry);
-    document.getElementById("clearManualBtn").addEventListener("click", clearManualEntries);
-    document.getElementById("refreshBtn").addEventListener("click", loadWeeklyFeed);
-    searchInput.addEventListener("input", render);
-
-    async function init() {
-      loadSavedWeeklyFeedUrl();
-      render();
-      await loadWeeklyFeed();
-    }
-
-    init();
-  </script>
 </body>
 </html>
